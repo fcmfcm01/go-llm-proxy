@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server"
+	"github.com/fcmfcm01/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/internal/server"
 )
 
 // TestHealthStatusUpdates tests real-time health status updates

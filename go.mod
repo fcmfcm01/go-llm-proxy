@@ -1,4 +1,4 @@
-module github.com/fcmfcm01/go-llm-proxy/go-llm-proxy
+module github.com/fcmfcm01/go-llm-proxy
 
 go 1.21
 

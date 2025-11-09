@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server"
+	"github.com/fcmfcm01/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/internal/server"
 )
 
 // TestProviderStatusContract tests the GET /admin/api/v1/providers/status endpoint

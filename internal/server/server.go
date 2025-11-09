@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server/handlers"
+	"github.com/fcmfcm01/go-llm-proxy/internal/server/handlers"
 )
 
 // Server represents the HTTP server

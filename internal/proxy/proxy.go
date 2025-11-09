@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/converter"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/converter"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
 	"github.com/sirupsen/logrus"
 )
 

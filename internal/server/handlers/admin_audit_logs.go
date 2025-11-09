@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/repository"
+	"github.com/fcmfcm01/go-llm-proxy/internal/repository"
 )
 
 // AuditLogHandler handles audit log queries

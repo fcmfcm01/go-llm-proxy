@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/auth"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/middleware"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/proxy"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server/handlers"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/services"
+	"github.com/fcmfcm01/go-llm-proxy/internal/auth"
+	"github.com/fcmfcm01/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/internal/middleware"
+	"github.com/fcmfcm01/go-llm-proxy/internal/proxy"
+	"github.com/fcmfcm01/go-llm-proxy/internal/server/handlers"
+	"github.com/fcmfcm01/go-llm-proxy/internal/services"
 )
 
 // RouteConfig holds configuration for setting up routes
@@ -28,10 +28,8 @@ type RouteConfig struct {
 	ModelMapper      *proxy.ModelMapper
 
 	// Services
-	ProviderService      *services.ProviderService
-	ModelMappingService  *services.ModelMappingService
-	ConfigService        *services.ConfigService
-	AuditService         *services.AuditService
+	ProviderService *services.ProviderService
+	BackupService   *services.BackupService
 
 	// Middleware config
 	EnableRateLimit  bool

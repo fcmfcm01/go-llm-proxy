@@ -3,7 +3,7 @@ package e2e
 import (
 	"testing"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/tests/testutil"
+	"github.com/fcmfcm01/go-llm-proxy/tests/testutil"
 )
 
 // TestAll runs all E2E test suites

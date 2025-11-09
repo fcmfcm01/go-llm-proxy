@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/auth"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/auth"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
 )
 
 // TestAuthLoginContract tests POST /admin/api/v1/auth/login contract

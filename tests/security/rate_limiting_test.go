@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/auth"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/middleware"
+	"github.com/fcmfcm01/go-llm-proxy/internal/auth"
+	"github.com/fcmfcm01/go-llm-proxy/internal/middleware"
 )
 
 func TestRateLimitingSecurity(t *testing.T) {

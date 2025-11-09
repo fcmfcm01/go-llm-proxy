@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
 )
 
 // ModelMapper handles model name mapping between providers

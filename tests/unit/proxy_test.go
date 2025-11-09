@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/proxy"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/proxy"
 )
 
 // TestRoundRobinLoadBalancing tests round-robin load balancing

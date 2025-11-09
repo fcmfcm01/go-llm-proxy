@@ -13,7 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/services"
+	"github.com/fcmfcm01/go-llm-proxy/internal/services"
 )
 
 // ConfigImportHandler handles configuration import requests

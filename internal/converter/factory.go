@@ -3,7 +3,7 @@ package converter
 import (
 	"fmt"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
 )
 
 // Converter defines the interface for format conversion

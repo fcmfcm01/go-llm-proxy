@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/services"
+	"github.com/fcmfcm01/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/services"
 )
 
 // ProviderServiceWrapper wraps the provider service for handler functions
@@ -90,16 +90,16 @@ func (w *ProviderServiceWrapper) HandleGetProvider(c *gin.Context) {
 // HandleUpdateProvider handles PUT /admin/api/v1/providers/:id
 func (w *ProviderServiceWrapper) HandleUpdateProvider(c *gin.Context) {
 	id := c.Param("id")
-	var provider models.Provider
-	if err := c.ShouldBindJSON(&provider); err != nil {
+	var updates map[string]interface{}
+	if err := c.ShouldBindJSON(&updates); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "invalid request body",
 		})
 		return
 	}
 
-	provider.ID = id
-	if err := w.ProviderService.UpdateProvider(&provider); err != nil {
+	provider, err := w.ProviderService.UpdateProvider(id, updates)
+	if err != nil {
 		w.Logger.WithError(err).Error("Failed to update provider")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "failed to update provider",
@@ -139,8 +139,11 @@ func (w *ProviderServiceWrapper) HandleToggleProvider(c *gin.Context) {
 		return
 	}
 
-	provider.Enabled = !provider.Enabled
-	if err := w.ProviderService.UpdateProvider(provider); err != nil {
+	updates := map[string]interface{}{
+		"enabled": !provider.Enabled,
+	}
+	provider, err = w.ProviderService.UpdateProvider(id, updates)
+	if err != nil {
 		w.Logger.WithError(err).Error("Failed to toggle provider")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "failed to toggle provider",

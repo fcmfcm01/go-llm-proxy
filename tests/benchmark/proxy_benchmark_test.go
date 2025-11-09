@@ -10,9 +10,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/metrics"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/middleware"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/proxy"
+	"github.com/fcmfcm01/go-llm-proxy/internal/metrics"
+	"github.com/fcmfcm01/go-llm-proxy/internal/middleware"
+	"github.com/fcmfcm01/go-llm-proxy/internal/proxy"
 )
 
 // BenchmarkConnectionPool benchmarks connection pooling performance

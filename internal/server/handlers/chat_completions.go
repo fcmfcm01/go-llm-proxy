@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/proxy"
+	"github.com/fcmfcm01/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/proxy"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )

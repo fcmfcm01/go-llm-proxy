@@ -7,8 +7,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/config"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server"
+	"github.com/fcmfcm01/go-llm-proxy/internal/config"
+	"github.com/fcmfcm01/go-llm-proxy/internal/server"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

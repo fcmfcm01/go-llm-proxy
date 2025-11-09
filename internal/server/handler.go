@@ -3,9 +3,9 @@ package server
 import (
 	"net/http"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/config"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/proxy"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/types"
+	"github.com/fcmfcm01/go-llm-proxy/internal/config"
+	"github.com/fcmfcm01/go-llm-proxy/internal/proxy"
+	"github.com/fcmfcm01/go-llm-proxy/internal/types"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )

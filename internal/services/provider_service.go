@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/repository"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/repository"
 	"github.com/sirupsen/logrus"
 )
 

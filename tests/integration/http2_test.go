@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/net/http2"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server"
+	"github.com/fcmfcm01/go-llm-proxy/internal/server"
 )
 
 // TestHTTP2Support tests HTTP/2 functionality

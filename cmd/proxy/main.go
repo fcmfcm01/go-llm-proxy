@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"os"
@@ -11,10 +10,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"go-llm-proxy/internal/config"
-	"go-llm-proxy/internal/logging"
-	"go-llm-proxy/internal/metrics"
-	"go-llm-proxy/internal/server"
+	"github.com/fcmfcm01/go-llm-proxy/internal/config"
+	"github.com/fcmfcm01/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/internal/server"
 )
 
 // @title LLM Proxy API
@@ -30,29 +28,23 @@ import (
 
 func main() {
 	// Load configuration
-	cfg, err := config.Load()
+	cfg, err := config.LoadConfig("config.yaml")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to load configuration: %v\n", err)
 		os.Exit(1)
 	}
 
 	// Initialize logger
-	logger := logging.NewLogger(cfg.Logging)
+	logger := logging.NewSimpleLogger("info")
 	logger.Info("Starting LLM Proxy", "version", "1.0.0", "port", cfg.Server.Port)
 
-	// Initialize metrics
-	metricsCollector := metrics.NewMetrics(cfg.Metrics)
-	if err := metricsCollector.Start(); err != nil {
-		logger.Warn("Failed to start metrics collector", "error", err)
-	}
-	defer metricsCollector.Stop()
-
 	// Create HTTP server
-	srv, err := server.NewServer(cfg, logger, metricsCollector)
-	if err != nil {
-		logger.Error("Failed to create server", "error", err)
-		os.Exit(1)
-	}
+	srv := server.NewServer(&server.ServerConfig{
+		Port:         cfg.Server.Port,
+		ReadTimeout:  time.Duration(cfg.Server.ReadTimeout) * time.Second,
+		WriteTimeout: time.Duration(cfg.Server.WriteTimeout) * time.Second,
+		IdleTimeout:  time.Duration(cfg.Server.IdleTimeout) * time.Second,
+	}, logger.Logger)
 
 	// Start server in goroutine
 	go func() {
@@ -70,13 +62,7 @@ func main() {
 	logger.Info("Shutting down server...")
 
 	// Graceful shutdown
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-
-	if err := srv.Stop(ctx); err != nil {
-		logger.Error("Server forced to shutdown", "error", err)
-		os.Exit(1)
-	}
+	srv.Stop()
 
 	logger.Info("Server exited")
 }

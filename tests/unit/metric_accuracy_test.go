@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/metrics"
+	"github.com/fcmfcm01/go-llm-proxy/internal/metrics"
 )
 
 // TestMetricAccuracy tests the accuracy of metric collection

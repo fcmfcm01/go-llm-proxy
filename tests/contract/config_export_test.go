@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/services"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server/handlers"
+	"github.com/fcmfcm01/go-llm-proxy/internal/services"
+	"github.com/fcmfcm01/go-llm-proxy/internal/server/handlers"
 )
 
 func TestConfigExportContract(t *testing.T) {

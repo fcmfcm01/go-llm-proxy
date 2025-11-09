@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/internal/models"
 )
 
 // SessionStore defines the interface for session storage

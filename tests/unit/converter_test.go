@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/converter"
+	"github.com/fcmfcm01/go-llm-proxy/internal/converter"
 )
 
 // TestAnthropicToOpenAIConversion tests Anthropic→OpenAI format conversion with test vectors
