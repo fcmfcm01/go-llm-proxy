@@ -11,6 +11,7 @@ import (
 	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/middleware"
 	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/proxy"
 	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server/handlers"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/services"
 )
 
 // RouteConfig holds configuration for setting up routes
@@ -87,10 +88,16 @@ func setupAdminAPIRoutes(router *gin.Engine, authService *auth.AuthService, auth
 	// CSRF protection
 	admin.Use(middleware.SimpleCSRFMiddleware())
 
-	// Provider management endpoints (will be implemented in Phase 5)
+	// TODO: Initialize services (will be done in server initialization)
+	// providerService := services.NewProviderService(...)
+	// modelMappingService := services.NewModelMappingService(...)
+	// configService := services.NewConfigService(...)
+	// auditService := services.NewAuditService(...)
+
+	// Provider management endpoints (Phase 5 - US1)
 	providers := admin.Group("/providers")
 	{
-		// These handlers will be created in Phase 5 (US1)
+		// TODO: Wire up actual handlers once services are initialized
 		providers.GET("", placeholderHandler("List providers"))
 		providers.POST("", placeholderHandler("Create provider"))
 		providers.GET("/:id", placeholderHandler("Get provider"))
@@ -99,7 +106,7 @@ func setupAdminAPIRoutes(router *gin.Engine, authService *auth.AuthService, auth
 		providers.POST("/:id/toggle", placeholderHandler("Toggle provider"))
 	}
 
-	// Model mapping endpoints
+	// Model mapping endpoints (Phase 5 - US1)
 	models := admin.Group("/model-mappings")
 	{
 		models.GET("", placeholderHandler("List model mappings"))
@@ -107,7 +114,7 @@ func setupAdminAPIRoutes(router *gin.Engine, authService *auth.AuthService, auth
 		models.DELETE("/:id", placeholderHandler("Delete model mapping"))
 	}
 
-	// Provider status endpoints (Phase 6)
+	// Provider status endpoints (Phase 6 - US3)
 	status := admin.Group("/providers/status")
 	{
 		status.GET("", placeholderHandler("Get all provider statuses"))
@@ -115,7 +122,7 @@ func setupAdminAPIRoutes(router *gin.Engine, authService *auth.AuthService, auth
 		status.POST("/:id/priority", placeholderHandler("Update provider priority"))
 	}
 
-	// Configuration endpoints
+	// Configuration endpoints (Phase 8)
 	configGroup := admin.Group("/config")
 	{
 		configGroup.GET("/export", placeholderHandler("Export configuration"))
@@ -123,7 +130,7 @@ func setupAdminAPIRoutes(router *gin.Engine, authService *auth.AuthService, auth
 		configGroup.POST("/reload", placeholderHandler("Reload configuration"))
 	}
 
-	// Audit log endpoints
+	// Audit log endpoints (Phase 8)
 	audit := admin.Group("/audit")
 	{
 		audit.GET("/logs", placeholderHandler("Get audit logs"))

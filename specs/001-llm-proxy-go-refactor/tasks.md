@@ -109,37 +109,37 @@ Based on plan.md - single project structure at repository root:
 
 ### Tests for User Story 2 (TDD Required)
 
-- [ ] T042 [P] [US2] Contract test for POST /v1/chat/completions per openai-proxy.yaml in tests/contract/chat_completions_test.go
-- [ ] T043 [P] [US2] Contract test for POST /v1/completions in tests/contract/completions_test.go
-- [ ] T044 [P] [US2] Contract test for POST /v1/embeddings in tests/contract/embeddings_test.go
-- [ ] T045 [P] [US2] Contract test for GET /v1/models in tests/contract/models_test.go
-- [ ] T046 [P] [US2] Unit test for Anthropic→OpenAI format conversion with test vectors in tests/unit/converter_anthropic_test.go
-- [ ] T047 [P] [US2] Unit test for OpenAI→Anthropic format conversion with test vectors in tests/unit/converter_openai_test.go
-- [ ] T048 [P] [US2] Unit test for round-robin load balancing in tests/unit/loadbalancer_test.go
-- [ ] T049 [P] [US2] Unit test for provider health checking in tests/unit/health_check_test.go
-- [ ] T050 [P] [US2] Integration test for streaming responses in tests/integration/streaming_test.go
-- [ ] T051 [P] [US2] Integration test for automatic failover in tests/integration/failover_test.go
-- [ ] T052 [P] [US2] Unit test for audit logging with required fields in tests/unit/audit_test.go
+- [X] T042 [P] [US2] Contract test for POST /v1/chat/completions per openai-proxy.yaml in tests/contract/chat_completions_test.go
+- [X] T043 [P] [US2] Contract test for POST /v1/completions in tests/contract/completions_test.go
+- [X] T044 [P] [US2] Contract test for POST /v1/embeddings in tests/contract/embeddings_test.go
+- [X] T045 [P] [US2] Contract test for GET /v1/models in tests/contract/models_test.go
+- [X] T046 [P] [US2] Unit test for Anthropic→OpenAI format conversion with test vectors in tests/unit/converter_anthropic_test.go
+- [X] T047 [P] [US2] Unit test for OpenAI→Anthropic format conversion with test vectors in tests/unit/converter_openai_test.go
+- [X] T048 [P] [US2] Unit test for round-robin load balancing in tests/unit/loadbalancer_test.go
+- [X] T049 [P] [US2] Unit test for provider health checking in tests/unit/health_check_test.go
+- [X] T050 [P] [US2] Integration test for streaming responses in tests/integration/streaming_test.go
+- [X] T051 [P] [US2] Integration test for automatic failover in tests/integration/failover_test.go
+- [X] T052 [P] [US2] Unit test for audit logging with required fields in tests/unit/audit_test.go
 
 ### Implementation for User Story 2
 
-- [ ] T053 [P] [US2] Implement Anthropic format converter in internal/converter/anthropic.go
-- [ ] T054 [P] [US2] Implement OpenAI format converter in internal/converter/openai.go
-- [ ] T055 [P] [US2] Create converter factory in internal/converter/factory.go
-- [ ] T056 [P] [US2] Implement round-robin load balancer in internal/proxy/loadbalancer.go
-- [ ] T057 [P] [US2] Implement provider health checker in internal/proxy/health.go
-- [ ] T058 [US2] Create HTTP reverse proxy handler in internal/proxy/proxy.go (depends on T053-T057)
-- [ ] T059 [US2] Implement streaming response handler in internal/proxy/streaming.go
-- [ ] T060 [P] [US2] Implement model name mapping in internal/proxy/model_mapper.go
-- [ ] T061 [P] [US2] Create audit logger for proxy requests in internal/logging/audit.go
-- [ ] T062 [US2] Implement chat completions handler in internal/server/handlers/chat_completions.go
-- [ ] T063 [US2] Implement completions handler in internal/server/handlers/completions.go
-- [ ] T064 [US2] Implement embeddings handler in internal/server/handlers/embeddings.go
-- [ ] T065 [US2] Implement models list handler in internal/server/handlers/models.go
-- [ ] T066 [P] [US2] Add request validation middleware in internal/middleware/validation.go
-- [ ] T067 [P] [US2] Add rate limiting middleware in internal/middleware/ratelimit.go
-- [ ] T068 [US2] Wire proxy API routes in internal/server/routes.go
-- [ ] T069 [US2] Add comprehensive logging for all proxy operations
+- [X] T053 [P] [US2] Implement Anthropic format converter in internal/converter/anthropic.go
+- [X] T054 [P] [US2] Implement OpenAI format converter in internal/converter/openai.go
+- [X] T055 [P] [US2] Create converter factory in internal/converter/factory.go
+- [X] T056 [P] [US2] Implement round-robin load balancer in internal/proxy/loadbalancer.go
+- [X] T057 [P] [US2] Implement provider health checker in internal/proxy/health.go
+- [X] T058 [US2] Create HTTP reverse proxy handler in internal/proxy/proxy.go (depends on T053-T057)
+- [X] T059 [US2] Implement streaming response handler in internal/proxy/streaming.go
+- [X] T060 [P] [US2] Implement model name mapping in internal/proxy/model_mapper.go
+- [X] T061 [P] [US2] Create audit logger for proxy requests in internal/logging/audit.go
+- [X] T062 [US2] Implement chat completions handler in internal/server/handlers/chat_completions.go
+- [X] T063 [US2] Implement completions handler in internal/server/handlers/completions.go
+- [X] T064 [US2] Implement embeddings handler in internal/server/handlers/embeddings.go
+- [X] T065 [US2] Implement models list handler in internal/server/handlers/models.go
+- [X] T066 [P] [US2] Add request validation middleware in internal/middleware/validation.go
+- [X] T067 [P] [US2] Add rate limiting middleware in internal/middleware/ratelimit.go
+- [X] T068 [US2] Wire proxy API routes in internal/server/routes.go
+- [X] T069 [US2] Add comprehensive logging for all proxy operations
 
 **Checkpoint**: At this point, User Story 2 should be fully functional - clients can use OpenAI-compatible API transparently
 
@@ -153,15 +153,15 @@ Based on plan.md - single project structure at repository root:
 
 ### Tests for User Story 1 (TDD Required)
 
-- [ ] T070 [P] [US1] Contract test for GET /admin/api/v1/providers per admin-api.yaml in tests/contract/providers_list_test.go
-- [ ] T071 [P] [US1] Contract test for POST /admin/api/v1/providers in tests/contract/providers_create_test.go
-- [ ] T072 [P] [US1] Contract test for PUT /admin/api/v1/providers/:id in tests/contract/providers_update_test.go
-- [ ] T073 [P] [US1] Contract test for DELETE /admin/api/v1/providers/:id in tests/contract/providers_delete_test.go
-- [ ] T074 [P] [US1] Contract test for POST /admin/api/v1/providers/:id/toggle in tests/contract/providers_toggle_test.go
-- [ ] T075 [P] [US1] Unit test for provider validation in tests/unit/provider_validation_test.go
-- [ ] T076 [P] [US1] Unit test for configuration hot reload in tests/unit/config_reload_test.go
-- [ ] T077 [P] [US1] Integration test for provider CRUD operations in tests/integration/provider_crud_test.go
-- [ ] T078 [P] [US1] Unit test for model mapping management in tests/unit/model_mapping_test.go
+- [X] T070 [P] [US1] Contract test for GET /admin/api/v1/providers per admin-api.yaml in tests/contract/providers_list_test.go
+- [X] T071 [P] [US1] Contract test for POST /admin/api/v1/providers in tests/contract/providers_create_test.go
+- [X] T072 [P] [US1] Contract test for PUT /admin/api/v1/providers/:id in tests/contract/providers_update_test.go
+- [X] T073 [P] [US1] Contract test for DELETE /admin/api/v1/providers/:id in tests/contract/providers_delete_test.go
+- [X] T074 [P] [US1] Contract test for POST /admin/api/v1/providers/:id/toggle in tests/contract/providers_toggle_test.go
+- [X] T075 [P] [US1] Unit test for provider validation in tests/unit/provider_validation_test.go
+- [X] T076 [P] [US1] Unit test for configuration hot reload in tests/unit/config_reload_test.go
+- [X] T077 [P] [US1] Integration test for provider CRUD operations in tests/integration/provider_crud_test.go
+- [X] T078 [P] [US1] Unit test for model mapping management in tests/unit/model_mapping_test.go
 
 ### Implementation for User Story 1
 
