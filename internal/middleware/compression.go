@@ -13,17 +13,17 @@ import (
 
 // CompressionConfig holds compression middleware configuration
 type CompressionConfig struct {
-	Level           int      // gzip compression level (1-9)
-	MinSize         int      // Minimum response size to compress
-	ExcludedPaths   []string // Paths to exclude from compression
-	ExcludedTypes   []string // Content types to exclude from compression
+	Level         int      // gzip compression level (1-9)
+	MinSize       int      // Minimum response size to compress
+	ExcludedPaths []string // Paths to exclude from compression
+	ExcludedTypes []string // Content types to exclude from compression
 }
 
 // DefaultCompressionConfig returns default compression configuration
 func DefaultCompressionConfig() *CompressionConfig {
 	return &CompressionConfig{
-		Level:         gzip.BestCompression,
-		MinSize:       1024, // 1KB
+		Level:   gzip.BestCompression,
+		MinSize: 1024, // 1KB
 		ExcludedPaths: []string{
 			"/metrics",
 			"/admin/api/v1/audit-logs/export",

@@ -12,11 +12,11 @@ import (
 type LoadTestSuite struct {
 	suite.Suite
 	*TestSuite
-	successCount  uint64
-	failureCount  uint64
-	totalCount    uint64
-	startTime     time.Time
-	providerID    string
+	successCount uint64
+	failureCount uint64
+	totalCount   uint64
+	startTime    time.Time
+	providerID   string
 }
 
 // TestConcurrentConnections tests 1000+ concurrent connections

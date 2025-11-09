@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/services"
 	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/services"
 )
 
 // AdminProviderPriorityHandler handles provider priority updates
@@ -64,8 +64,8 @@ func (h *AdminProviderPriorityHandler) HandleUpdatePriority(c *gin.Context) {
 		// Log the failed action
 		if h.auditLogger != nil {
 			h.auditLogger.LogAdminEvent(c.Request.Context(), logging.AuditEventProviderUpdate, providerID, c.ClientIP(), "failure", map[string]interface{}{
-				"error":    err.Error(),
-				"field":    "priority",
+				"error":     err.Error(),
+				"field":     "priority",
 				"new_value": request.Priority,
 			})
 		}
@@ -79,7 +79,7 @@ func (h *AdminProviderPriorityHandler) HandleUpdatePriority(c *gin.Context) {
 	// Log successful update
 	if h.auditLogger != nil {
 		h.auditLogger.LogAdminEvent(c.Request.Context(), logging.AuditEventProviderUpdate, providerID, c.ClientIP(), "success", map[string]interface{}{
-			"field":    "priority",
+			"field":     "priority",
 			"new_value": request.Priority,
 		})
 	}

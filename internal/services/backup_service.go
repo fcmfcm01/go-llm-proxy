@@ -33,13 +33,13 @@ type BackupConfig struct {
 
 // BackupResult holds the result of a backup operation
 type BackupResult struct {
-	Success      bool      `json:"success"`
-	BackupPath   string    `json:"backup_path"`
-	BackupSize   int64     `json:"backup_size_bytes"`
-	Timestamp    time.Time `json:"timestamp"`
-	Duration     string    `json:"duration"`
-	RecordCount  int       `json:"record_count"`
-	Error        string    `json:"error,omitempty"`
+	Success     bool      `json:"success"`
+	BackupPath  string    `json:"backup_path"`
+	BackupSize  int64     `json:"backup_size_bytes"`
+	Timestamp   time.Time `json:"timestamp"`
+	Duration    string    `json:"duration"`
+	RecordCount int       `json:"record_count"`
+	Error       string    `json:"error,omitempty"`
 }
 
 // NewBackupService creates a new backup service
@@ -99,12 +99,12 @@ func (b *BackupService) CreateBackup(config BackupConfig) (*BackupResult, error)
 	b.cleanupOldBackups()
 
 	result := &BackupResult{
-		Success:      true,
-		BackupPath:   backupPath,
-		BackupSize:   backupInfo.Size(),
-		Timestamp:    startTime,
-		Duration:     time.Since(startTime).String(),
-		RecordCount:  recordCount,
+		Success:     true,
+		BackupPath:  backupPath,
+		BackupSize:  backupInfo.Size(),
+		Timestamp:   startTime,
+		Duration:    time.Since(startTime).String(),
+		RecordCount: recordCount,
 	}
 
 	b.logger.Infof("Backup created successfully: %s (size: %d bytes, duration: %s)",

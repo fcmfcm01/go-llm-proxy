@@ -111,11 +111,11 @@ func (s *InputSanitizer) ValidateInput(input string, rules ValidationRules) erro
 
 // ValidationRules holds validation rules for input
 type ValidationRules struct {
-	MinLength  int
-	MaxLength  int
-	Pattern    string
-	AllowHTML  bool
-	Required   bool
+	MinLength int
+	MaxLength int
+	Pattern   string
+	AllowHTML bool
+	Required  bool
 }
 
 // SanitizeRequestMiddleware sanitizes request parameters and body

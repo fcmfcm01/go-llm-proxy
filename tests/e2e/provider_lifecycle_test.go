@@ -191,12 +191,12 @@ func (s *ProviderLifecycleTestSuite) TestProviderValidation() {
 		{
 			name: "",
 			data: map[string]interface{}{
-				"name":        "",
-				"type":        "openai",
-				"api_key":     "sk-key",
-				"base_url":    "https://api.openai.com/v1",
-				"priority":    1,
-				"enabled":     true,
+				"name":         "",
+				"type":         "openai",
+				"api_key":      "sk-key",
+				"base_url":     "https://api.openai.com/v1",
+				"priority":     1,
+				"enabled":      true,
 				"max_requests": 100,
 			},
 			expectError: true,

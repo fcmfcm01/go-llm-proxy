@@ -26,9 +26,9 @@ func NewTLSConfig(certPath, keyPath, minVersion, maxVersion string) *TLSConfig {
 		MaxVersion:               maxVersion,
 		PreferServerCipherSuites: true,
 		CurvePreferences: []tls.CurveID{
-			tls.X25519, // Curve25519
-			tls.CurveP256,   // P-256
-			tls.CurveP384,   // P-384
+			tls.X25519,    // Curve25519
+			tls.CurveP256, // P-256
+			tls.CurveP384, // P-384
 		},
 	}
 }

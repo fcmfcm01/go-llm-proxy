@@ -72,8 +72,8 @@ func (rp *HTTPRequestPool) Put(req *RequestWrapper) {
 
 // RequestWrapper wraps an HTTP request with pool management
 type RequestWrapper struct {
-	Buffer *BufferPool
-	Data   []byte
+	Buffer  *BufferPool
+	Data    []byte
 	ResetAt time.Time
 }
 
@@ -117,10 +117,10 @@ func (rp *ResponsePool) Put(resp *ResponseWrapper) {
 
 // ResponseWrapper wraps an HTTP response with pool management
 type ResponseWrapper struct {
-	Buffer      []byte
-	StatusCode  int
-	Headers     map[string]string
-	ReceivedAt  time.Time
+	Buffer     []byte
+	StatusCode int
+	Headers    map[string]string
+	ReceivedAt time.Time
 }
 
 // Writer is a pool-aware io.Writer
@@ -157,10 +157,10 @@ func (w *Writer) Put(buf *bytes.Buffer) io.Writer {
 
 // MultiPool manages multiple object pools
 type MultiPool struct {
-	bufferPool    *BufferPool
-	requestPool   *HTTPRequestPool
-	responsePool  *ResponsePool
-	writerPool    *Writer
+	bufferPool   *BufferPool
+	requestPool  *HTTPRequestPool
+	responsePool *ResponsePool
+	writerPool   *Writer
 }
 
 // NewMultiPool creates a new multi-pool instance
@@ -215,10 +215,10 @@ func (mp *MultiPool) PutWriter(buf *bytes.Buffer) {
 
 // Global pools for common use
 var (
-	GlobalBufferPool  = NewBufferPool()
-	GlobalRequestPool = NewHTTPRequestPool()
+	GlobalBufferPool   = NewBufferPool()
+	GlobalRequestPool  = NewHTTPRequestPool()
 	GlobalResponsePool = NewResponsePool()
-	GlobalMultiPool   = NewMultiPool()
+	GlobalMultiPool    = NewMultiPool()
 )
 
 // WithPool provides a convenient way to use a buffer from the pool
@@ -263,8 +263,8 @@ func (rcp *ReadCloserPool) Put(rc *ReadCloserWrapper) {
 
 // ReadCloserWrapper wraps an io.ReadCloser with pool management
 type ReadCloserWrapper struct {
-	Data    []byte
-	ReadAt  time.Time
+	Data   []byte
+	ReadAt time.Time
 }
 
 // NewPooledReadCloser creates a pooled ReadCloser from data

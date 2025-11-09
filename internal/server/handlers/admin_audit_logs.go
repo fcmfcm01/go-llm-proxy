@@ -8,16 +8,16 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 
 	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/repository"
 )
 
 // AuditLogHandler handles audit log queries
 type AuditLogHandler struct {
-	logger     *logrus.Logger
-	auditRepo  *repository.AuditLogRepository
+	logger    *logrus.Logger
+	auditRepo *repository.AuditLogRepository
 }
 
 // NewAuditLogHandler creates a new audit log handler
@@ -263,18 +263,18 @@ func (h *AuditLogHandler) csvEscape(value string) string {
 // LogAction logs an action to the audit log
 func (h *AuditLogHandler) LogAction(c *gin.Context, action, entity, entityID, status, message string, metadata map[string]interface{}) {
 	log := repository.AuditLog{
-		ID:          uuid.New().String(),
-		Timestamp:   time.Now(),
-		Level:       "info",
-		Action:      action,
-		Entity:      entity,
-		EntityID:    entityID,
-		Actor:       h.getActor(c),
-		IPAddress:   c.ClientIP(),
-		UserAgent:   c.Request.UserAgent(),
-		Status:      status,
-		Message:     message,
-		Metadata:    metadata,
+		ID:            uuid.New().String(),
+		Timestamp:     time.Now(),
+		Level:         "info",
+		Action:        action,
+		Entity:        entity,
+		EntityID:      entityID,
+		Actor:         h.getActor(c),
+		IPAddress:     c.ClientIP(),
+		UserAgent:     c.Request.UserAgent(),
+		Status:        status,
+		Message:       message,
+		Metadata:      metadata,
 		CorrelationID: c.GetString("correlation_id"),
 	}
 

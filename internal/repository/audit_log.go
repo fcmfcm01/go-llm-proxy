@@ -14,45 +14,45 @@ import (
 
 // AuditLog represents an audit log entry
 type AuditLog struct {
-	ID          string            `json:"id"`
-	Timestamp   time.Time         `json:"timestamp"`
-	Level       string            `json:"level"`
-	Action      string            `json:"action"`
-	Entity      string            `json:"entity"`
-	EntityID    string            `json:"entity_id"`
-	Actor       string            `json:"actor"`
-	IPAddress   string            `json:"ip_address"`
-	UserAgent   string            `json:"user_agent"`
-	Status      string            `json:"status"` // "success", "failure", "error"
-	Message     string            `json:"message"`
-	Metadata    map[string]interface{} `json:"metadata,omitempty"`
-	Duration    int64             `json:"duration_ms,omitempty"`
-	Error       string            `json:"error,omitempty"`
-	CorrelationID string          `json:"correlation_id,omitempty"`
+	ID            string                 `json:"id"`
+	Timestamp     time.Time              `json:"timestamp"`
+	Level         string                 `json:"level"`
+	Action        string                 `json:"action"`
+	Entity        string                 `json:"entity"`
+	EntityID      string                 `json:"entity_id"`
+	Actor         string                 `json:"actor"`
+	IPAddress     string                 `json:"ip_address"`
+	UserAgent     string                 `json:"user_agent"`
+	Status        string                 `json:"status"` // "success", "failure", "error"
+	Message       string                 `json:"message"`
+	Metadata      map[string]interface{} `json:"metadata,omitempty"`
+	Duration      int64                  `json:"duration_ms,omitempty"`
+	Error         string                 `json:"error,omitempty"`
+	CorrelationID string                 `json:"correlation_id,omitempty"`
 }
 
 // AuditLogQueryParams represents query parameters for audit logs
 type AuditLogQueryParams struct {
-	StartTime   time.Time
-	EndTime     time.Time
-	Actor       string
-	Action      string
-	Entity      string
-	Status      string
-	Search      string
-	Limit       int
-	Offset      int
-	SortBy      string // "timestamp", "action", "actor"
-	SortOrder   string // "asc", "desc"
+	StartTime time.Time
+	EndTime   time.Time
+	Actor     string
+	Action    string
+	Entity    string
+	Status    string
+	Search    string
+	Limit     int
+	Offset    int
+	SortBy    string // "timestamp", "action", "actor"
+	SortOrder string // "asc", "desc"
 }
 
 // AuditLogRepository handles audit log storage and retrieval
 type AuditLogRepository struct {
-	logger   *logrus.Logger
-	dataDir  string
-	logs     []AuditLog
-	mu       sync.RWMutex
-	maxLogs  int
+	logger  *logrus.Logger
+	dataDir string
+	logs    []AuditLog
+	mu      sync.RWMutex
+	maxLogs int
 }
 
 // NewAuditLogRepository creates a new audit log repository
@@ -63,9 +63,9 @@ func NewAuditLogRepository(logger *logrus.Logger, dataDir string) *AuditLogRepos
 	}
 
 	repo := &AuditLogRepository{
-		logger: logger,
+		logger:  logger,
 		dataDir: dataDir,
-		logs:   make([]AuditLog, 0),
+		logs:    make([]AuditLog, 0),
 		maxLogs: 10000, // Keep last 10,000 logs in memory
 	}
 

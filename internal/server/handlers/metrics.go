@@ -50,18 +50,18 @@ func (h *MetricsHandler) HandleMetricsConfig(c *gin.Context) {
 				"help": "Current number of requests being processed",
 			},
 			"llm_proxy_provider_requests_total": gin.H{
-				"type": "counter",
-				"help": "Total requests to each provider",
+				"type":   "counter",
+				"help":   "Total requests to each provider",
 				"labels": []string{"provider", "status_code"},
 			},
 			"llm_proxy_provider_request_duration_seconds": gin.H{
-				"type": "histogram",
-				"help": "Request duration by provider",
+				"type":   "histogram",
+				"help":   "Request duration by provider",
 				"labels": []string{"provider"},
 			},
 			"llm_proxy_provider_errors_total": gin.H{
-				"type": "counter",
-				"help": "Total errors by provider",
+				"type":   "counter",
+				"help":   "Total errors by provider",
 				"labels": []string{"provider", "error_type"},
 			},
 			"llm_proxy_response_size_bytes": gin.H{
@@ -105,13 +105,13 @@ func (h *MetricsHandler) HandleMetricsConfig(c *gin.Context) {
 				"help": "Number of unhealthy providers",
 			},
 			"llm_proxy_health_checks_total": gin.H{
-				"type": "counter",
-				"help": "Total health checks performed",
+				"type":   "counter",
+				"help":   "Total health checks performed",
 				"labels": []string{"provider", "result"},
 			},
 			"llm_proxy_health_response_time_seconds": gin.H{
-				"type": "histogram",
-				"help": "Provider response times for health checks",
+				"type":   "histogram",
+				"help":   "Provider response times for health checks",
 				"labels": []string{"provider"},
 			},
 		},

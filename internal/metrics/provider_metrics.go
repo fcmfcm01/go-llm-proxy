@@ -25,19 +25,19 @@ type ProviderMetricsCollector struct {
 
 // ProviderMetrics holds in-memory metrics for a single provider
 type ProviderMetrics struct {
-	ProviderID       string                 `json:"provider_id"`
-	RequestCount     int64                  `json:"request_count"`
-	SuccessCount     int64                  `json:"success_count"`
-	ErrorCount       int64                  `json:"error_count"`
-	SuccessRate      float64                `json:"success_rate"`
-	MinResponseTime  int64                  `json:"min_response_time_ms"`
-	MaxResponseTime  int64                  `json:"max_response_time_ms"`
-	AvgResponseTime  float64                `json:"avg_response_time_ms"`
-	TotalResponseTime int64                 `json:"total_response_time_ms"`
-	Healthy          bool                   `json:"healthy"`
-	LastHealthCheck  time.Time              `json:"last_health_check"`
-	MetricsByStatus  map[int]int64          `json:"metrics_by_status"`
-	RecentDurations  []int64                `json:"-"`
+	ProviderID        string        `json:"provider_id"`
+	RequestCount      int64         `json:"request_count"`
+	SuccessCount      int64         `json:"success_count"`
+	ErrorCount        int64         `json:"error_count"`
+	SuccessRate       float64       `json:"success_rate"`
+	MinResponseTime   int64         `json:"min_response_time_ms"`
+	MaxResponseTime   int64         `json:"max_response_time_ms"`
+	AvgResponseTime   float64       `json:"avg_response_time_ms"`
+	TotalResponseTime int64         `json:"total_response_time_ms"`
+	Healthy           bool          `json:"healthy"`
+	LastHealthCheck   time.Time     `json:"last_health_check"`
+	MetricsByStatus   map[int]int64 `json:"metrics_by_status"`
+	RecentDurations   []int64       `json:"-"`
 }
 
 // NewProviderMetricsCollector creates a new provider metrics collector

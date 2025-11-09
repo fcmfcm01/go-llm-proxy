@@ -12,8 +12,8 @@ import (
 
 // EncryptionService provides encryption/decryption functionality
 type EncryptionService struct {
-	key       []byte
-	block     cipher.Block
+	key   []byte
+	block cipher.Block
 }
 
 // NewEncryptionService creates a new encryption service with a given key
@@ -28,7 +28,7 @@ func NewEncryptionService(key string) (*EncryptionService, error) {
 	}
 
 	return &EncryptionService{
-		key:  hash[:],
+		key:   hash[:],
 		block: block,
 	}, nil
 }

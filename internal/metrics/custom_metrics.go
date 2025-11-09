@@ -10,34 +10,34 @@ import (
 // CustomMetrics holds all custom Prometheus metrics for the proxy
 type CustomMetrics struct {
 	// Request metrics
-	TotalRequests          prometheus.Counter
-	TotalErrors            prometheus.Counter
-	RequestDuration        prometheus.Histogram
-	RequestInFlight        prometheus.Gauge
+	TotalRequests   prometheus.Counter
+	TotalErrors     prometheus.Counter
+	RequestDuration prometheus.Histogram
+	RequestInFlight prometheus.Gauge
 
 	// Provider-specific metrics
-	ProviderRequests       *prometheus.CounterVec
-	ProviderDuration       *prometheus.HistogramVec
-	ProviderErrors         *prometheus.CounterVec
-	ProviderSuccessRate    *prometheus.GaugeVec
+	ProviderRequests    *prometheus.CounterVec
+	ProviderDuration    *prometheus.HistogramVec
+	ProviderErrors      *prometheus.CounterVec
+	ProviderSuccessRate *prometheus.GaugeVec
 
 	// Response metrics
-	ResponseSize           prometheus.Histogram
-	PromptTokens           prometheus.Histogram
-	CompletionTokens       prometheus.Histogram
-	TotalTokens            prometheus.Histogram
+	ResponseSize     prometheus.Histogram
+	PromptTokens     prometheus.Histogram
+	CompletionTokens prometheus.Histogram
+	TotalTokens      prometheus.Histogram
 
 	// Business metrics
-	ActiveUsers            prometheus.Gauge
-	LoadBalancedRequests   prometheus.Counter
-	FailedOverRequests     prometheus.Counter
-	RetriedRequests        prometheus.Counter
+	ActiveUsers          prometheus.Gauge
+	LoadBalancedRequests prometheus.Counter
+	FailedOverRequests   prometheus.Counter
+	RetriedRequests      prometheus.Counter
 
 	// Health metrics
-	HealthyProviders       prometheus.Gauge
-	UnhealthyProviders     prometheus.Gauge
-	ProviderHealthChecks   *prometheus.CounterVec
-	ProviderResponseTime   *prometheus.HistogramVec
+	HealthyProviders     prometheus.Gauge
+	UnhealthyProviders   prometheus.Gauge
+	ProviderHealthChecks *prometheus.CounterVec
+	ProviderResponseTime *prometheus.HistogramVec
 }
 
 // NewCustomMetrics creates a new custom metrics collector

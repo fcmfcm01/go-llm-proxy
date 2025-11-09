@@ -13,7 +13,6 @@ import (
 
 var ErrNoHealthyProviders = errors.New("no healthy providers available")
 
-
 // TestAutomaticFailover tests automatic failover functionality
 func TestAutomaticFailover(t *testing.T) {
 	t.Run("CreateFailoverManager", func(t *testing.T) {
@@ -29,9 +28,9 @@ func TestAutomaticFailover(t *testing.T) {
 		manager := NewTestFailoverManager()
 
 		provider := &models.Provider{
-			ID:      "provider-1",
-			Name:    "Test Provider 1",
-			Enabled: true,
+			ID:       "provider-1",
+			Name:     "Test Provider 1",
+			Enabled:  true,
 			Priority: 1,
 		}
 

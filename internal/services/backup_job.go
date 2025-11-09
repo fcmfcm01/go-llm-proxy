@@ -8,11 +8,11 @@ import (
 
 // BackupJob handles scheduled backup operations
 type BackupJob struct {
-	logger         *logrus.Logger
-	backupService  *BackupService
-	interval       time.Duration
-	stopCh         chan bool
-	isRunning      bool
+	logger        *logrus.Logger
+	backupService *BackupService
+	interval      time.Duration
+	stopCh        chan bool
+	isRunning     bool
 }
 
 // NewBackupJob creates a new backup job

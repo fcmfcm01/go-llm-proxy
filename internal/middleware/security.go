@@ -8,25 +8,25 @@ import (
 
 // SecurityHeadersConfig holds security headers configuration
 type SecurityHeadersConfig struct {
-	ContentSecurityPolicy       string // CSP header value
-	XSSProtection               string // X-XSS-Protection header
-	ContentTypeOptions          string // X-Content-Type-Options header
-	FrameOptions                string // X-Frame-Options header
-	ReferrerPolicy              string // Referrer-Policy header
+	ContentSecurityPolicy        string // CSP header value
+	XSSProtection                string // X-XSS-Protection header
+	ContentTypeOptions           string // X-Content-Type-Options header
+	FrameOptions                 string // X-Frame-Options header
+	ReferrerPolicy               string // Referrer-Policy header
 	PermittedCrossDomainPolicies string // X-Permitted-Cross-Domain-Policies header
-	StrictTransportSecurity     string // Strict-Transport-Security header
+	StrictTransportSecurity      string // Strict-Transport-Security header
 }
 
 // DefaultSecurityHeadersConfig returns default security headers configuration
 func DefaultSecurityHeadersConfig() *SecurityHeadersConfig {
 	return &SecurityHeadersConfig{
-		ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https:; frame-ancestors 'none';",
-		XSSProtection:         "1; mode=block",
-		ContentTypeOptions:    "nosniff",
-		FrameOptions:          "DENY",
-		ReferrerPolicy:        "strict-origin-when-cross-origin",
+		ContentSecurityPolicy:        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https:; frame-ancestors 'none';",
+		XSSProtection:                "1; mode=block",
+		ContentTypeOptions:           "nosniff",
+		FrameOptions:                 "DENY",
+		ReferrerPolicy:               "strict-origin-when-cross-origin",
 		PermittedCrossDomainPolicies: "none",
-		StrictTransportSecurity: "max-age=31536000; includeSubDomains; preload",
+		StrictTransportSecurity:      "max-age=31536000; includeSubDomains; preload",
 	}
 }
 

@@ -24,22 +24,22 @@ type ReadinessStatus struct {
 
 // CheckStatus holds the status of an individual check
 type CheckStatus struct {
-	Status  string `json:"status"`  // "ok", "error", "warning"
+	Status  string `json:"status"` // "ok", "error", "warning"
 	Message string `json:"message,omitempty"`
 	Latency int64  `json:"latency_ms,omitempty"`
 }
 
 // ReadinessHandler handles readiness check requests
 type ReadinessHandler struct {
-	logger  *logrus.Logger
+	logger   *logrus.Logger
 	checkers []ReadinessChecker
-	mu      sync.RWMutex
+	mu       sync.RWMutex
 }
 
 // NewReadinessHandler creates a new readiness handler
 func NewReadinessHandler(logger *logrus.Logger) *ReadinessHandler {
 	return &ReadinessHandler{
-		logger:  logger,
+		logger:   logger,
 		checkers: make([]ReadinessChecker, 0),
 	}
 }
@@ -161,7 +161,7 @@ func (c *ConfigChecker) Check() ReadinessStatus {
 
 // ProviderChecker checks if providers are available
 type ProviderChecker struct {
-	logger      *logrus.Logger
+	logger        *logrus.Logger
 	providerCount int
 }
 

@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
 	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
 	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/services"
-	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
 )
 
 // AdminModelMappingsHandler handles model mapping operations

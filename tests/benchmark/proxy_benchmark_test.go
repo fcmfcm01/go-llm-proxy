@@ -234,10 +234,10 @@ func BenchmarkMetricsRecording(b *testing.B) {
 func BenchmarkJSONEncoding(b *testing.B) {
 	// Test data
 	data := map[string]interface{}{
-		"id":      "test-123",
-		"name":    "Test Provider",
-		"status":  "active",
-		"models":  []string{"gpt-3.5-turbo", "gpt-4"},
+		"id":     "test-123",
+		"name":   "Test Provider",
+		"status": "active",
+		"models": []string{"gpt-3.5-turbo", "gpt-4"},
 		"metrics": map[string]interface{}{
 			"requests": 1000,
 			"latency":  150.5,
@@ -294,7 +294,7 @@ func BenchmarkThroughput(b *testing.B) {
 	router.Use(middleware.CompressionMiddleware(nil))
 	router.GET("/test", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"status":   "ok",
+			"status":    "ok",
 			"timestamp": time.Now().Unix(),
 		})
 	})

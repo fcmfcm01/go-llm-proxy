@@ -15,9 +15,9 @@ import (
 
 // ProviderRepository provides filesystem-based storage for providers
 type ProviderRepository struct {
-	dataDir string
-	logger  *logrus.Logger
-	mu      sync.RWMutex
+	dataDir   string
+	logger    *logrus.Logger
+	mu        sync.RWMutex
 	providers map[string]*models.Provider
 }
 

@@ -30,7 +30,7 @@ func (s *ProxyFlowTestSuite) TestChatCompletions() {
 		"messages": []map[string]string{
 			{"role": "user", "content": "Hello, how are you?"},
 		},
-		"max_tokens": 100,
+		"max_tokens":  100,
 		"temperature": 0.7,
 	}
 
@@ -72,9 +72,9 @@ func (s *ProxyFlowTestSuite) TestCompletions() {
 	s.setupTestProvider()
 
 	requestData := map[string]interface{}{
-		"model": "gpt-3.5-turbo",
-		"prompt": "Once upon a time",
-		"max_tokens": 100,
+		"model":       "gpt-3.5-turbo",
+		"prompt":      "Once upon a time",
+		"max_tokens":  100,
 		"temperature": 0.7,
 	}
 
@@ -331,7 +331,7 @@ func (s *ProxyFlowTestSuite) TestFormatConversion() {
 		"messages": []map[string]string{
 			{"role": "user", "content": "Hello from OpenAI client"},
 		},
-		"max_tokens": 100,
+		"max_tokens":  100,
 		"temperature": 0.7,
 	}
 

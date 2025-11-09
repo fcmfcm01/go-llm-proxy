@@ -12,8 +12,8 @@ import (
 
 // ConfigExportHandler handles configuration export requests
 type ConfigExportHandler struct {
-	logger         *logrus.Logger
-	backupService  *services.BackupService
+	logger        *logrus.Logger
+	backupService *services.BackupService
 }
 
 // NewConfigExportHandler creates a new config export handler
@@ -68,9 +68,9 @@ func (h *ConfigExportHandler) HandleExport(c *gin.Context) {
 	} else {
 		// Return backup information
 		c.JSON(http.StatusOK, gin.H{
-			"status":   "success",
-			"message":  "Configuration exported successfully",
-			"backup":   result,
+			"status":    "success",
+			"message":   "Configuration exported successfully",
+			"backup":    result,
 			"timestamp": time.Now().Format(time.RFC3339),
 		})
 	}
@@ -91,9 +91,9 @@ func (h *ConfigExportHandler) HandleListBackups(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":   "success",
-		"backups":  backups,
-		"count":    len(backups),
+		"status":    "success",
+		"backups":   backups,
+		"count":     len(backups),
 		"timestamp": time.Now().Format(time.RFC3339),
 	})
 }

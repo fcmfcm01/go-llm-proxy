@@ -15,9 +15,9 @@ import (
 
 // ModelMappingRepository provides filesystem-based storage for model mappings
 type ModelMappingRepository struct {
-	dataDir string
-	logger  *logrus.Logger
-	mu      sync.RWMutex
+	dataDir  string
+	logger   *logrus.Logger
+	mu       sync.RWMutex
 	mappings map[string]*models.ModelMapping
 }
 
@@ -29,9 +29,9 @@ func NewModelMappingRepository(dataDir string, logger *logrus.Logger) (*ModelMap
 	}
 
 	repo := &ModelMappingRepository{
-		dataDir:   dataDir,
-		logger:    logger,
-		mappings:  make(map[string]*models.ModelMapping),
+		dataDir:  dataDir,
+		logger:   logger,
+		mappings: make(map[string]*models.ModelMapping),
 	}
 
 	// Load existing mappings

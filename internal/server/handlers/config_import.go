@@ -18,9 +18,9 @@ import (
 
 // ConfigImportHandler handles configuration import requests
 type ConfigImportHandler struct {
-	logger         *logrus.Logger
-	backupService  *services.BackupService
-	dataDir        string
+	logger        *logrus.Logger
+	backupService *services.BackupService
+	dataDir       string
 }
 
 // NewConfigImportHandler creates a new config import handler
@@ -122,21 +122,21 @@ func (h *ConfigImportHandler) HandleImport(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":   "success",
-		"message":  "Configuration imported successfully",
-		"result":   result,
+		"status":    "success",
+		"message":   "Configuration imported successfully",
+		"result":    result,
 		"timestamp": time.Now().Format(time.RFC3339),
 	})
 }
 
 // ImportResult holds the result of an import operation
 type ImportResult struct {
-	Success      bool      `json:"success"`
-	Imported     []string  `json:"imported"`
-	Skipped      []string  `json:"skipped"`
-	Timestamp    time.Time `json:"timestamp"`
-	Duration     string    `json:"duration"`
-	RecordCount  int       `json:"record_count"`
+	Success     bool      `json:"success"`
+	Imported    []string  `json:"imported"`
+	Skipped     []string  `json:"skipped"`
+	Timestamp   time.Time `json:"timestamp"`
+	Duration    string    `json:"duration"`
+	RecordCount int       `json:"record_count"`
 }
 
 // importBackup imports configuration from a backup file

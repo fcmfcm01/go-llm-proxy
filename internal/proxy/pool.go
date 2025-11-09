@@ -18,11 +18,11 @@ type ConnectionPool struct {
 
 // PoolStats holds connection pool statistics
 type PoolStats struct {
-	ActiveConnections   int64 `json:"active_connections"`
-	IdleConnections     int64 `json:"idle_connections"`
-	TotalConnections    int64 `json:"total_connections"`
-	RequestsServed      int64 `json:"requests_served"`
-	RequestsFailed      int64 `json:"requests_failed"`
+	ActiveConnections   int64         `json:"active_connections"`
+	IdleConnections     int64         `json:"idle_connections"`
+	TotalConnections    int64         `json:"total_connections"`
+	RequestsServed      int64         `json:"requests_served"`
+	RequestsFailed      int64         `json:"requests_failed"`
 	AverageResponseTime time.Duration `json:"avg_response_time"`
 }
 

@@ -190,7 +190,7 @@ func (s *StreamingTestSuite) TestStreamingErrorHandling() {
 		{
 			name: "empty_messages_streaming",
 			request: map[string]interface{}{
-				"model": "gpt-3.5-turbo",
+				"model":  "gpt-3.5-turbo",
 				"stream": true,
 			},
 			expectError: true,

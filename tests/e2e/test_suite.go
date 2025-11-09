@@ -15,12 +15,12 @@ import (
 // TestSuite provides a comprehensive E2E testing framework
 type TestSuite struct {
 	suite.Suite
-	ctx              context.Context
-	testServer       *httptest.Server
-	adminToken       string
-	tmpDir           string
-	configPath       string
-	testData         map[string]interface{}
+	ctx        context.Context
+	testServer *httptest.Server
+	adminToken string
+	tmpDir     string
+	configPath string
+	testData   map[string]interface{}
 }
 
 // SetupSuite runs once before all tests in the suite
@@ -89,12 +89,12 @@ func (s *TestSuite) createTestData() {
 			"password": "admin123",
 		},
 		"test_provider": map[string]interface{}{
-			"name":        "test-openai",
-			"type":        "openai",
-			"api_key":     "sk-test-key",
-			"base_url":    "https://api.openai.com/v1",
-			"priority":    1,
-			"enabled":     true,
+			"name":         "test-openai",
+			"type":         "openai",
+			"api_key":      "sk-test-key",
+			"base_url":     "https://api.openai.com/v1",
+			"priority":     1,
+			"enabled":      true,
 			"max_requests": 100,
 		},
 		"test_model": map[string]interface{}{

@@ -10,7 +10,7 @@ import (
 
 // HealthzHandler handles basic health check requests
 type HealthzHandler struct {
-	logger *logrus.Logger
+	logger    *logrus.Logger
 	startTime time.Time
 }
 

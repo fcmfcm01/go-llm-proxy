@@ -31,11 +31,11 @@ func (h *DetailedHealthHandler) HandleDetailed(c *gin.Context) {
 
 	// Build response
 	response := gin.H{
-		"status":    "healthy",
-		"timestamp": time.Now().Format(time.RFC3339),
-		"uptime":    h.getUptime(),
-		"version":   getVersion(),
-		"system":    systemInfo,
+		"status":     "healthy",
+		"timestamp":  time.Now().Format(time.RFC3339),
+		"uptime":     h.getUptime(),
+		"version":    getVersion(),
+		"system":     systemInfo,
 		"components": componentInfo,
 	}
 
@@ -53,11 +53,11 @@ func (h *DetailedHealthHandler) HandleDetailed(c *gin.Context) {
 // collectSystemInfo collects system information
 func (h *DetailedHealthHandler) collectSystemInfo() gin.H {
 	return gin.H{
-		"hostname":  getHostname(),
+		"hostname":   getHostname(),
 		"go_version": runtime.Version(),
-		"go_os":     runtime.GOOS,
-		"go_arch":   runtime.GOARCH,
-		"num_cpu":   runtime.NumCPU(),
+		"go_os":      runtime.GOOS,
+		"go_arch":    runtime.GOARCH,
+		"num_cpu":    runtime.NumCPU(),
 		"build_info": getBuildInfo(),
 	}
 }
@@ -66,23 +66,23 @@ func (h *DetailedHealthHandler) collectSystemInfo() gin.H {
 func (h *DetailedHealthHandler) collectComponentInfo() gin.H {
 	return gin.H{
 		"server": gin.H{
-			"status": "ok",
+			"status":  "ok",
 			"message": "Server is running",
 		},
 		"proxy": gin.H{
-			"status": "ok",
+			"status":  "ok",
 			"message": "Proxy is operational",
 		},
 		"config": gin.H{
-			"status": "ok",
+			"status":  "ok",
 			"message": "Configuration loaded",
 		},
 		"metrics": gin.H{
-			"status": "ok",
+			"status":  "ok",
 			"message": "Metrics collection active",
 		},
 		"health_checks": gin.H{
-			"status": "ok",
+			"status":  "ok",
 			"message": "Health checks operational",
 		},
 	}

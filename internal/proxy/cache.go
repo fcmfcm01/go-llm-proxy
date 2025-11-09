@@ -11,15 +11,15 @@ import (
 
 // CacheEntry represents a cached response
 type CacheEntry struct {
-	Key         string        `json:"key"`
-	Response    []byte        `json:"response"`
-	StatusCode  int           `json:"status_code"`
+	Key         string            `json:"key"`
+	Response    []byte            `json:"response"`
+	StatusCode  int               `json:"status_code"`
 	Headers     map[string]string `json:"headers"`
-	CreatedAt   time.Time     `json:"created_at"`
-	ExpiresAt   time.Time     `json:"expires_at"`
-	Size        int64         `json:"size"`
-	AccessCount int64         `json:"access_count"`
-	LastAccess  time.Time     `json:"last_access"`
+	CreatedAt   time.Time         `json:"created_at"`
+	ExpiresAt   time.Time         `json:"expires_at"`
+	Size        int64             `json:"size"`
+	AccessCount int64             `json:"access_count"`
+	LastAccess  time.Time         `json:"last_access"`
 }
 
 // RequestCache implements request/response caching
@@ -32,20 +32,20 @@ type RequestCache struct {
 
 // CacheConfig holds cache configuration
 type CacheConfig struct {
-	MaxEntries    int
-	MaxSizeBytes  int64
-	DefaultTTL    time.Duration
-	MaxTTL        time.Duration
+	MaxEntries      int
+	MaxSizeBytes    int64
+	DefaultTTL      time.Duration
+	MaxTTL          time.Duration
 	CleanupInterval time.Duration
 }
 
 // CacheStats holds cache statistics
 type CacheStats struct {
-	Hits        int64 `json:"hits"`
-	Misses      int64 `json:"misses"`
-	Evictions   int64 `json:"evictions"`
+	Hits         int64 `json:"hits"`
+	Misses       int64 `json:"misses"`
+	Evictions    int64 `json:"evictions"`
 	TotalEntries int64 `json:"total_entries"`
-	TotalSize   int64 `json:"total_size_bytes"`
+	TotalSize    int64 `json:"total_size_bytes"`
 }
 
 // DefaultCacheConfig returns default cache configuration
@@ -69,11 +69,11 @@ func NewRequestCache(config CacheConfig) *RequestCache {
 		entries: make(map[string]*CacheEntry),
 		config:  config,
 		stats: CacheStats{
-			Hits:        0,
-			Misses:      0,
-			Evictions:   0,
+			Hits:         0,
+			Misses:       0,
+			Evictions:    0,
 			TotalEntries: 0,
-			TotalSize:   0,
+			TotalSize:    0,
 		},
 	}
 
@@ -125,15 +125,15 @@ func (c *RequestCache) Put(key string, response []byte, statusCode int, headers 
 	}
 
 	entry := &CacheEntry{
-		Key:        key,
-		Response:   response,
-		StatusCode: statusCode,
-		Headers:    headers,
-		CreatedAt:  time.Now(),
-		ExpiresAt:  time.Now().Add(ttl),
-		Size:       int64(len(response)),
+		Key:         key,
+		Response:    response,
+		StatusCode:  statusCode,
+		Headers:     headers,
+		CreatedAt:   time.Now(),
+		ExpiresAt:   time.Now().Add(ttl),
+		Size:        int64(len(response)),
 		AccessCount: 0,
-		LastAccess: time.Now(),
+		LastAccess:  time.Now(),
 	}
 
 	// Check if we need to make space
@@ -272,11 +272,11 @@ func (c *RequestCache) Clear() {
 
 	c.entries = make(map[string]*CacheEntry)
 	c.stats = CacheStats{
-		Hits:        c.stats.Hits,
-		Misses:      c.stats.Misses,
-		Evictions:   c.stats.Evictions,
+		Hits:         c.stats.Hits,
+		Misses:       c.stats.Misses,
+		Evictions:    c.stats.Evictions,
 		TotalEntries: 0,
-		TotalSize:   0,
+		TotalSize:    0,
 	}
 }
 

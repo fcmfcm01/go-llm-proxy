@@ -25,18 +25,18 @@ func TestAuditLogCompleteness(t *testing.T) {
 	t.Run("Required fields are present in audit log", func(t *testing.T) {
 		// Create an audit log with all required fields
 		log := &repository.AuditLog{
-			ID:          "test-123",
-			Timestamp:   time.Now(),
-			Level:       "info",
-			Action:      "create",
-			Entity:      "provider",
-			EntityID:    "prov-456",
-			Actor:       "admin",
-			IPAddress:   "192.168.1.1",
-			UserAgent:   "TestAgent/1.0",
-			Status:      "success",
-			Message:     "Test message",
-			Duration:    100,
+			ID:            "test-123",
+			Timestamp:     time.Now(),
+			Level:         "info",
+			Action:        "create",
+			Entity:        "provider",
+			EntityID:      "prov-456",
+			Actor:         "admin",
+			IPAddress:     "192.168.1.1",
+			UserAgent:     "TestAgent/1.0",
+			Status:        "success",
+			Message:       "Test message",
+			Duration:      100,
 			CorrelationID: "corr-789",
 		}
 
@@ -75,18 +75,18 @@ func TestAuditLogCompleteness(t *testing.T) {
 					logID := "test-" + action + "-" + entity + "-" + status
 
 					log := &repository.AuditLog{
-						ID:          logID,
-						Timestamp:   time.Now(),
-						Level:       "info",
-						Action:      action,
-						Entity:      entity,
-						EntityID:    "test-id-123",
-						Actor:       "test-user",
-						IPAddress:   "10.0.0.1",
-						UserAgent:   "TestAgent/1.0",
-						Status:      status,
-						Message:     "Test " + action + " on " + entity,
-						Duration:    50,
+						ID:        logID,
+						Timestamp: time.Now(),
+						Level:     "info",
+						Action:    action,
+						Entity:    entity,
+						EntityID:  "test-id-123",
+						Actor:     "test-user",
+						IPAddress: "10.0.0.1",
+						UserAgent: "TestAgent/1.0",
+						Status:    status,
+						Message:   "Test " + action + " on " + entity,
+						Duration:  50,
 					}
 
 					err := repo.Create(log)
@@ -121,14 +121,14 @@ func TestAuditLogCompleteness(t *testing.T) {
 		}
 
 		log := &repository.AuditLog{
-			ID:          "test-metadata",
-			Timestamp:   time.Now(),
-			Action:      "create",
-			Entity:      "provider",
-			Actor:       "admin",
-			Status:      "success",
-			Message:     "Test with metadata",
-			Metadata:    metadata,
+			ID:        "test-metadata",
+			Timestamp: time.Now(),
+			Action:    "create",
+			Entity:    "provider",
+			Actor:     "admin",
+			Status:    "success",
+			Message:   "Test with metadata",
+			Metadata:  metadata,
 		}
 
 		err := repo.Create(log)
@@ -148,14 +148,14 @@ func TestAuditLogCompleteness(t *testing.T) {
 		// Create multiple logs
 		for i := 0; i < 10; i++ {
 			log := &repository.AuditLog{
-				ID:          "query-test-" + string(rune(i)),
-				Timestamp:   time.Now(),
-				Action:      "view",
-				Entity:      "provider",
-				Actor:       "user" + string(rune(i)),
-				Status:      "success",
-				Message:     "View operation " + string(rune(i)),
-				Duration:    int64(i * 10),
+				ID:        "query-test-" + string(rune(i)),
+				Timestamp: time.Now(),
+				Action:    "view",
+				Entity:    "provider",
+				Actor:     "user" + string(rune(i)),
+				Status:    "success",
+				Message:   "View operation " + string(rune(i)),
+				Duration:  int64(i * 10),
 			}
 			err := repo.Create(log)
 			require.NoError(t, err)
@@ -189,23 +189,23 @@ func TestAuditLogCompleteness(t *testing.T) {
 		// Create logs with different timestamps
 		time.Sleep(10 * time.Millisecond) // Ensure different timestamps
 		log1 := &repository.AuditLog{
-			ID:          "order-test-1",
-			Timestamp:   time.Now(),
-			Action:      "create",
-			Entity:      "provider",
-			Actor:       "admin",
-			Status:      "success",
-			Message:     "First log",
+			ID:        "order-test-1",
+			Timestamp: time.Now(),
+			Action:    "create",
+			Entity:    "provider",
+			Actor:     "admin",
+			Status:    "success",
+			Message:   "First log",
 		}
 		time.Sleep(10 * time.Millisecond)
 		log2 := &repository.AuditLog{
-			ID:          "order-test-2",
-			Timestamp:   time.Now(),
-			Action:      "update",
-			Entity:      "provider",
-			Actor:       "admin",
-			Status:      "success",
-			Message:     "Second log",
+			ID:        "order-test-2",
+			Timestamp: time.Now(),
+			Action:    "update",
+			Entity:    "provider",
+			Actor:     "admin",
+			Status:    "success",
+			Message:   "Second log",
 		}
 
 		err := repo.Create(log1)
@@ -215,10 +215,10 @@ func TestAuditLogCompleteness(t *testing.T) {
 
 		// Query with ascending order
 		params := repository.AuditLogQueryParams{
-			Limit:       50,
-			Offset:      0,
-			SortBy:      "timestamp",
-			SortOrder:   "asc",
+			Limit:     50,
+			Offset:    0,
+			SortBy:    "timestamp",
+			SortOrder: "asc",
 		}
 
 		logs, _, err := repo.Query(params)
@@ -245,16 +245,16 @@ func TestAuditLogCompleteness(t *testing.T) {
 		// Plus additional fields for forensic analysis
 
 		log := &repository.AuditLog{
-			ID:          "spec-test",
-			Timestamp:   time.Now(),
-			Action:      "create",
-			Entity:      "provider",
-			Actor:       "admin",
-			Status:      "success",
-			Message:     "Created provider",
-			IPAddress:   "192.168.1.100",
-			UserAgent:   "Mozilla/5.0",
-			Duration:    250,
+			ID:            "spec-test",
+			Timestamp:     time.Now(),
+			Action:        "create",
+			Entity:        "provider",
+			Actor:         "admin",
+			Status:        "success",
+			Message:       "Created provider",
+			IPAddress:     "192.168.1.100",
+			UserAgent:     "Mozilla/5.0",
+			Duration:      250,
 			CorrelationID: "req-123",
 		}
 
