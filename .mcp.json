@@ -1,0 +1,114 @@
+{
+  "mcpServers": {
+    "Sequential Thinking": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y @modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {}
+    },
+    "Excel": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx --yes @negokaz/excel-mcp-server"
+      ],
+      "env": {
+        "EXCEL_MCP_PAGING_CELLS_LIMIT": "4000"
+      }
+    },
+    "context7": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y @upstash/context7-mcp@latest"
+      ],
+      "env": {
+        "DEFAULT_MINIMUM_TOKENS": "10000"
+      }
+    },
+    "Maven": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y mcp-maven-deps"
+      ],
+      "env": {}
+    },
+    "AWS Knowledge Base": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y @modelcontextprotocol/server-aws-kb-retrieval"
+      ],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "",
+        "AWS_REGION": "",
+        "AWS_SECRET_ACCESS_KEY": ""
+      }
+    },
+    "Memory": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y @modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "memory.json"
+      }
+    },
+    "Filesystem": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y @modelcontextprotocol/server-filesystem /path/to/allowed/directory"
+      ],
+      "env": {}
+    },
+    "Git": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "path/to/git/repo"
+      ],
+      "env": {}
+    },
+    "Playwright": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y @executeautomation/playwright-mcp-server"
+      ],
+      "env": {}
+    },
+    "Qdrant Server": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "uvx mcp-server-qdrant"
+      ],
+      "env": {
+        "COLLECTION_NAME": "None",
+        "EMBEDDING_MODEL": "sentence-transformers/all-MiniLM-L6-v2",
+        "EMBEDDING_PROVIDER": "fastembed",
+        "QDRANT_API_KEY": "None",
+        "QDRANT_LOCAL_PATH": "None",
+        "QDRANT_URL": "http://localhost:6333",
+        "TOOL_FIND_DESCRIPTION": "See default in settings.py",
+        "TOOL_STORE_DESCRIPTION": "See default in settings.py"
+      }
+    },
+    "Codegen": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/codegen-sh/codegen-sdk.git#egg=codegen-mcp-server&subdirectory=codegen-examples/examples/codegen-mcp-server",
+        "codegen-mcp-server",
+        "--yes"
+      ],
+      "env": {}
+    }
+  }
+}

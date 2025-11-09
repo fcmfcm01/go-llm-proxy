@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(then echo \"exists\")",
+      "Bash(else echo \"new\")",
+      "Bash(test:*)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(go test:*)",
+      "Bash(go mod download:*)",
+      "Bash(go mod tidy:*)",
+      "Bash(find:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

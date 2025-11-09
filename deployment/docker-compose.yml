@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # Main LLM Proxy service
+  llm-proxy:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: llm-proxy
+    ports:
+      - "8080:8080"  # HTTP
+      - "8443:8443"  # HTTPS
+    environment:
+      - LLM_PROXY_SERVER_PORT=8080
+      - LLM_PROXY_SERVER_TLS_PORT=8443
+      - LLM_PROXY_SERVER_ENABLE_TLS=true
+      - LLM_PROXY_SECURITY_SESSION_SECRET=${LLM_PROXY_SESSION_SECRET:-your-secret-key-change-me}
+      - LLM_PROXY_PROXY_TIMEOUT=30
+      - LLM_PROXY_LOGGING_LEVEL=info
+      - LLM_PROXY_MONITORING_ENABLED=true
+    volumes:
+      - ./data/config:/app/data/config
+      - ./data/backup:/app/data/backup
+      - ./data/sessions:/app/data/sessions
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+          cpus: '0.5'
+        reservations:
+          memory: 25M
+          cpus: '0.25'
+    networks:
+      - llm-proxy-network
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    networks:
+      - llm-proxy-network
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    restart: unless-stopped
+    networks:
+      - llm-proxy-network
+    depends_on:
+      - prometheus
+
+  # Load testing tool (optional)
+  loadtest:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.loadtest
+    container_name: loadtest
+    environment:
+      - TARGET_URL=http://llm-proxy:8080
+      - REQUEST_COUNT=100
+      - CONCURRENCY=10
+    depends_on:
+      - llm-proxy
+    networks:
+      - llm-proxy-network
+    profiles:
+      - testing
+
+networks:
+  llm-proxy-network:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

@@ -1,0 +1,37 @@
+openapi: 3.0.3
+info:
+  title: Health & Metrics API
+  version: 1.0.0
+
+servers:
+  - url: https://api.proxy.example.com
+
+paths:
+  /healthz:
+    get:
+      summary: Basic health check
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  uptime:
+                    type: string
+                    example: 1h30m45s
+
+  /metrics:
+    get:
+      summary: Prometheus metrics
+      responses:
+        '200':
+          description: Prometheus metrics
+          content:
+            text/plain:
+              schema:
+                type: string

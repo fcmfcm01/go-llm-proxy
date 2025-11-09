@@ -1,0 +1,8 @@
+# Tasks: LLM代理服务器 - Python到Go语言重构
+
+**Generated**: 2025-11-08
+**Total Tasks**: 120
+**User Stories**: 5 (US1-US5)
+**Organization**: By user story with TDD approach
+
+Tasks created - see full file at: specs/001-llm-proxy-go-refactor/tasks.md

@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Admin API
+  description: Administrative interface
+  version: 1.0.0
+
+servers:
+  - url: https://admin.proxy.example.com/api/v1
+
+paths:
+  /providers:
+    get:
+      summary: List all providers
+      responses:
+        '200':
+          description: List of providers
+    post:
+      summary: Create a new provider
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, name, api_url]
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                api_url:
+                  type: string
+                enabled:
+                  type: boolean
+      responses:
+        '201':
+          description: Provider created
+        '401':
+          description: Unauthorized
+
+  /auth/login:
+    post:
+      summary: Login to admin interface
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Invalid credentials

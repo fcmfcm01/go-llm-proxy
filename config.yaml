@@ -1,0 +1,56 @@
+# Go LLM Proxy Configuration
+
+server:
+  host: "0.0.0.0"
+  port: 8080
+  mode: "debug" # debug or release
+  read_timeout: 30s
+  write_timeout: 30s
+  idle_timeout: 120s
+
+proxy:
+  default_backend: "https://api.openai.com/v1"
+  timeout: 30s
+  max_retries: 3
+
+auth:
+  enabled: true
+  username: "admin"
+  password: "admin123"
+  session_timeout: 24h
+
+logging:
+  level: "info" # debug, info, warn, error
+  format: "json" # json or text
+  output: "stdout" # stdout or file path
+
+metrics:
+  enabled: true
+  path: "/metrics"
+
+# Provider configurations
+providers:
+  - id: "openai"
+    name: "OpenAI"
+    url: "https://api.openai.com/v1"
+    enabled: true
+    created_at: 0
+    updated_at: 0
+
+  - id: "anthropic"
+    name: "Anthropic"
+    url: "https://api.anthropic.com/v1"
+    enabled: false
+    created_at: 0
+    updated_at: 0
+
+# Model mapping for format conversion
+model_mapping:
+  "claude-3-opus-20240229": "gpt-4"
+  "claude-3-sonnet-20240229": "gpt-4-turbo"
+  "claude-3-haiku-20240307": "gpt-3.5-turbo"
+  "claude-3-5-sonnet-20241022": "gpt-4o"
+  "gpt-4": "claude-3-opus-20240229"
+  "gpt-4-turbo": "claude-3-sonnet-20240229"
+  "gpt-3.5-turbo": "claude-3-haiku-20240307"
+  "gpt-4o": "claude-3-5-sonnet-20241022"
