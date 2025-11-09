@@ -27,6 +27,12 @@ type RouteConfig struct {
 	LoadBalancer     proxy.LoadBalancer
 	ModelMapper      *proxy.ModelMapper
 
+	// Services
+	ProviderService      *services.ProviderService
+	ModelMappingService  *services.ModelMappingService
+	ConfigService        *services.ConfigService
+	AuditService         *services.AuditService
+
 	// Middleware config
 	EnableRateLimit  bool
 	EnableValidation bool
@@ -43,8 +49,8 @@ func SetupRoutes(router *gin.Engine, config *RouteConfig) {
 	// Admin authentication routes (no auth middleware)
 	setupAdminAuthRoutes(router, authHandler)
 
-	// Admin API routes (require authentication)
-	setupAdminAPIRoutes(router, config.AuthService, authHandler)
+	// Admin API routes (require authentication) - now with full config
+	setupAdminAPIRoutes(router, config)
 
 	// Proxy API routes (require authentication or API key)
 	setupProxyAPIRoutes(router, config)
@@ -76,11 +82,11 @@ func setupAdminAuthRoutes(router *gin.Engine, authHandler *handlers.AuthHandler)
 }
 
 // setupAdminAPIRoutes configures protected admin API routes
-func setupAdminAPIRoutes(router *gin.Engine, authService *auth.AuthService, authHandler *handlers.AuthHandler) {
+func setupAdminAPIRoutes(router *gin.Engine, config *RouteConfig) {
 	admin := router.Group("/admin/api/v1")
 
 	// Apply authentication middleware
-	admin.Use(middleware.AuthMiddleware(authService))
+	admin.Use(middleware.AuthMiddleware(config.AuthService))
 
 	// Require admin role
 	admin.Use(middleware.RequireRole("admin"))
@@ -88,53 +94,47 @@ func setupAdminAPIRoutes(router *gin.Engine, authService *auth.AuthService, auth
 	// CSRF protection
 	admin.Use(middleware.SimpleCSRFMiddleware())
 
-	// TODO: Initialize services (will be done in server initialization)
-	// providerService := services.NewProviderService(...)
-	// modelMappingService := services.NewModelMappingService(...)
-	// configService := services.NewConfigService(...)
-	// auditService := services.NewAuditService(...)
-
 	// Provider management endpoints (Phase 5 - US1)
 	providers := admin.Group("/providers")
 	{
-		// TODO: Wire up actual handlers once services are initialized
-		providers.GET("", placeholderHandler("List providers"))
-		providers.POST("", placeholderHandler("Create provider"))
-		providers.GET("/:id", placeholderHandler("Get provider"))
-		providers.PUT("/:id", placeholderHandler("Update provider"))
-		providers.DELETE("/:id", placeholderHandler("Delete provider"))
-		providers.POST("/:id/toggle", placeholderHandler("Toggle provider"))
+		// Use the actual handler implementations
+		providers.GET("", handlers.HandleListProviders)
+		providers.POST("", handlers.HandleCreateProvider)
+		providers.GET("/:id", handlers.HandleGetProvider)
+		providers.PUT("/:id", handlers.HandleUpdateProvider)
+		providers.DELETE("/:id", handlers.HandleDeleteProvider)
+		providers.POST("/:id/toggle", handlers.HandleToggleProvider)
 	}
 
 	// Model mapping endpoints (Phase 5 - US1)
 	models := admin.Group("/model-mappings")
 	{
-		models.GET("", placeholderHandler("List model mappings"))
-		models.POST("", placeholderHandler("Create model mapping"))
-		models.DELETE("/:id", placeholderHandler("Delete model mapping"))
+		models.GET("", handlers.HandleListModelMappings)
+		models.POST("", handlers.HandleCreateModelMapping)
+		models.DELETE("/:id", handlers.HandleDeleteModelMapping)
 	}
 
 	// Provider status endpoints (Phase 6 - US3)
 	status := admin.Group("/providers/status")
 	{
-		status.GET("", placeholderHandler("Get all provider statuses"))
-		status.GET("/:id", placeholderHandler("Get provider status"))
-		status.POST("/:id/priority", placeholderHandler("Update provider priority"))
+		status.GET("", handlers.HandleGetAllProviderStatuses)
+		status.GET("/:id", handlers.HandleGetProviderStatus)
+		status.POST("/:id/priority", handlers.HandleUpdateProviderPriority)
 	}
 
 	// Configuration endpoints (Phase 8)
 	configGroup := admin.Group("/config")
 	{
-		configGroup.GET("/export", placeholderHandler("Export configuration"))
-		configGroup.POST("/import", placeholderHandler("Import configuration"))
-		configGroup.POST("/reload", placeholderHandler("Reload configuration"))
+		configGroup.GET("/export", handlers.HandleExportConfig)
+		configGroup.POST("/import", handlers.HandleImportConfig)
+		configGroup.POST("/reload", handlers.HandleReloadConfig)
 	}
 
 	// Audit log endpoints (Phase 8)
 	audit := admin.Group("/audit")
 	{
-		audit.GET("/logs", placeholderHandler("Get audit logs"))
-		audit.GET("/logs/:id", placeholderHandler("Get audit log"))
+		audit.GET("/logs", handlers.HandleGetAuditLogs)
+		audit.GET("/logs/:id", handlers.HandleGetAuditLog)
 	}
 }
 
