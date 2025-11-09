@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/example/go-llm-proxy/internal/auth"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/auth"
 )
 
 // TestPasswordHashingArgon2 tests Argon2id password hashing

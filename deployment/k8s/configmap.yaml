@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: llm-proxy-config
+  namespace: llm-proxy
+  labels:
+    app: llm-proxy
+data:
+  config.yaml: |
+    server:
+      port: 8080
+      tls_port: 8443
+      host: "0.0.0.0"
+      mode: "production"
+      read_timeout: 30
+      write_timeout: 30
+      idle_timeout: 90
+      enable_tls: true
+
+    auth:
+      session_timeout: 24h
+      secret_key: "${LLM_PROXY_SECRET_KEY}"
+
+    logging:
+      level: "info"
+      format: "json"
+      enable_audit: true
+
+    metrics:
+      enabled: true
+      port: 9090
+
+    proxy:
+      timeout: 30
+      max_retries: 3
+      request_timeout: 60
+      idle_timeout: 90
+
+    performance:
+      connection_pool_size: 100
+      cache_enabled: true
+      cache_ttl: 300
+      enable_compression: true

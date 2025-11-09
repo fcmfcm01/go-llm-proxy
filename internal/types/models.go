@@ -1,7 +1,5 @@
 package types
 
-import "time"
-
 // Provider represents an LLM provider configuration
 type Provider struct {
 	ID        string `json:"id" binding:"required"`

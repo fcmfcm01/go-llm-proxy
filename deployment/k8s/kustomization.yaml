@@ -1,0 +1,58 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: llm-proxy
+
+resources:
+- namespace.yaml
+- configmap.yaml
+- secret.yaml
+- rbac.yaml
+- pvc.yaml
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+- hpa.yaml
+- pdb.yaml
+- network-policy.yaml
+- monitoring.yaml
+
+images:
+- name: go-llm-proxy
+  newName: go-llm-proxy
+  newTag: "1.0.0"
+
+configMapGenerator:
+- name: llm-proxy-config
+  files:
+  - config.yaml=config/config.yaml
+
+secretGenerator:
+- name: llm-proxy-secret
+  env: .env.production
+  type: Opaque
+
+commonLabels:
+  app: llm-proxy
+  version: v1.0.0
+
+commonAnnotations:
+  description: "LLM Proxy - Go implementation of OpenAI-compatible API gateway"
+  owner: "platform-team"
+
+# Resource validation
+crds:
+- ../crds/llm-proxy-crd.yaml
+
+# Patches
+patchesStrategicMerge:
+- patches/deployment-patch.yaml
+
+# Replicas
+replicas:
+- name: llm-proxy
+  count: 2
+
+# Resources
+resources:
+- ../services/

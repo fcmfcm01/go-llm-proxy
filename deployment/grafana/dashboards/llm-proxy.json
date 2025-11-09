@@ -1,0 +1,327 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "LLM Proxy Dashboard",
+    "description": "Comprehensive monitoring dashboard for LLM Proxy",
+    "tags": ["llm", "proxy", "monitoring"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(llm_proxy_requests_total[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Requests/sec",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(llm_proxy_errors_total[5m])",
+            "legendFormat": "Errors/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(llm_proxy_requests_total[5m])",
+            "legendFormat": "Total/sec",
+            "refId": "B"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Errors/sec",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "Request Duration (p95)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(llm_proxy_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "p95",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(llm_proxy_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "p50",
+            "refId": "B"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Seconds",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "id": 4,
+        "title": "Requests In Flight",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "llm_proxy_requests_in_flight",
+            "legendFormat": "In Flight",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Requests",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        }
+      },
+      {
+        "id": 5,
+        "title": "Provider Request Distribution",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(llm_proxy_provider_requests_total[5m]) by (provider)",
+            "legendFormat": "{{provider}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Requests/sec",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 16
+        }
+      },
+      {
+        "id": 6,
+        "title": "Provider Health Status",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "llm_proxy_health_healthy_providers",
+            "legendFormat": "Healthy",
+            "refId": "A"
+          },
+          {
+            "expr": "llm_proxy_health_unhealthy_providers",
+            "legendFormat": "Unhealthy",
+            "refId": "B"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 16
+        }
+      },
+      {
+        "id": 7,
+        "title": "Response Size Distribution",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(llm_proxy_response_size_bytes_sum[5m]) / rate(llm_proxy_response_size_bytes_count[5m])",
+            "legendFormat": "Avg Size (bytes)",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Bytes",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 24
+        }
+      },
+      {
+        "id": 8,
+        "title": "Token Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(llm_proxy_total_tokens[5m])",
+            "legendFormat": "Total tokens/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(llm_proxy_prompt_tokens[5m])",
+            "legendFormat": "Prompt tokens/sec",
+            "refId": "B"
+          },
+          {
+            "expr": "rate(llm_proxy_completion_tokens[5m])",
+            "legendFormat": "Completion tokens/sec",
+            "refId": "C"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Tokens/sec",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 24
+        }
+      },
+      {
+        "id": 9,
+        "title": "Load Balancing Metrics",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(llm_proxy_load_balanced_requests_total[5m])",
+            "legendFormat": "Load Balanced/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(llm_proxy_failed_over_requests_total[5m])",
+            "legendFormat": "Failed Over/sec",
+            "refId": "B"
+          },
+          {
+            "expr": "rate(llm_proxy_retried_requests_total[5m])",
+            "legendFormat": "Retried/sec",
+            "refId": "C"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Requests/sec",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 32
+        }
+      },
+      {
+        "id": 10,
+        "title": "Provider Response Times (p95)",
+        "type": "heatmap",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(llm_proxy_provider_request_duration_seconds_bucket[5m])) by (provider)",
+            "legendFormat": "{{provider}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 40
+        }
+      },
+      {
+        "id": 11,
+        "title": "Health Check Response Times",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(llm_proxy_health_response_time_seconds_sum[5m]) / rate(llm_proxy_health_response_time_seconds_count[5m]) by (provider)",
+            "legendFormat": "{{provider}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Seconds",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 48
+        }
+      },
+      {
+        "id": 12,
+        "title": "Active Users",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "llm_proxy_active_users",
+            "legendFormat": "Active Users",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Users",
+            "min": 0
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 56
+        }
+      }
+    ]
+  }
+}

@@ -3,9 +3,8 @@ package server
 import (
 	"crypto/tls"
 	"fmt"
+	"net/http"
 	"os"
-
-	"github.com/sirupsen/logrus"
 )
 
 // TLSConfig holds TLS configuration
@@ -28,8 +27,8 @@ func NewTLSConfig(certPath, keyPath, minVersion, maxVersion string) *TLSConfig {
 		PreferServerCipherSuites: true,
 		CurvePreferences: []tls.CurveID{
 			tls.X25519, // Curve25519
-			tls.P256,   // P-256
-			tls.P384,   // P-384
+			tls.CurveP256,   // P-256
+			tls.CurveP384,   // P-384
 		},
 	}
 }

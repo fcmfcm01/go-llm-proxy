@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/example/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
 )
 
 // ModelMapper handles model name mapping between providers
@@ -36,7 +36,7 @@ func (m *ModelMapper) MapModel(sourceModel string, provider *models.Provider) (s
 	// Look for exact match
 	if mapping, exists := m.mappings[sourceModel]; exists {
 		// Check if mapping applies to this provider
-		if mapping.ProviderID == "" || mapping.ProviderID == provider.ID {
+		if mapping.SourceProvider == "" || mapping.SourceProvider == provider.ID {
 			return mapping.TargetModel, nil
 		}
 	}
@@ -46,7 +46,7 @@ func (m *ModelMapper) MapModel(sourceModel string, provider *models.Provider) (s
 		if strings.HasSuffix(source, "*") {
 			prefix := strings.TrimSuffix(source, "*")
 			if strings.HasPrefix(sourceModel, prefix) {
-				if mapping.ProviderID == "" || mapping.ProviderID == provider.ID {
+				if mapping.SourceProvider == "" || mapping.SourceProvider == provider.ID {
 					return mapping.TargetModel, nil
 				}
 			}
@@ -106,7 +106,7 @@ func (m *ModelMapper) ReverseMapModel(targetModel string, provider *models.Provi
 	// Look for reverse mapping
 	for source, mapping := range m.mappings {
 		if mapping.TargetModel == targetModel {
-			if mapping.ProviderID == "" || mapping.ProviderID == provider.ID {
+			if mapping.SourceProvider == "" || mapping.SourceProvider == provider.ID {
 				return source
 			}
 		}
@@ -122,8 +122,8 @@ func (m *ModelMapper) AddMapping(mapping *models.ModelMapping) {
 	defer m.mu.Unlock()
 
 	key := mapping.SourceModel
-	if mapping.ProviderID != "" {
-		key = fmt.Sprintf("%s:%s", mapping.ProviderID, mapping.SourceModel)
+	if mapping.SourceProvider != "" {
+		key = fmt.Sprintf("%s:%s", mapping.SourceProvider, mapping.SourceModel)
 	}
 
 	m.mappings[key] = mapping
@@ -177,8 +177,8 @@ func (m *ModelMapper) UpdateMappings(mappings []*models.ModelMapping) {
 	m.mappings = make(map[string]*models.ModelMapping)
 	for _, mapping := range mappings {
 		key := mapping.SourceModel
-		if mapping.ProviderID != "" {
-			key = fmt.Sprintf("%s:%s", mapping.ProviderID, mapping.SourceModel)
+		if mapping.SourceProvider != "" {
+			key = fmt.Sprintf("%s:%s", mapping.SourceProvider, mapping.SourceModel)
 		}
 		m.mappings[key] = mapping
 	}
@@ -239,7 +239,7 @@ func (m *ModelMapper) GetSupportedModels(provider *models.Provider) []string {
 
 	// Add all mapped models for this provider
 	for source, mapping := range m.mappings {
-		if mapping.ProviderID == "" || mapping.ProviderID == provider.ID {
+		if mapping.SourceProvider == "" || mapping.SourceProvider == provider.ID {
 			models[source] = true
 		}
 	}

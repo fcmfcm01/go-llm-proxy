@@ -65,13 +65,14 @@ func StrictCORSConfig(allowedOrigins []string) *CORSConfig {
 
 // SetupCORS sets up CORS middleware
 func (s *Server) SetupCORS(config *CORSConfig) gin.HandlerFunc {
-	corsConfig := cors.Default()
-	corsConfig.AllowOrigins = config.AllowOrigins
-	corsConfig.AllowMethods = config.AllowMethods
-	corsConfig.AllowHeaders = config.AllowHeaders
-	corsConfig.ExposeHeaders = config.ExposeHeaders
-	corsConfig.AllowCredentials = config.AllowCredentials
-	corsConfig.MaxAge = config.MaxAge
+	corsConfig := cors.New(cors.Config{
+		AllowOrigins:     config.AllowOrigins,
+		AllowMethods:     config.AllowMethods,
+		AllowHeaders:     config.AllowHeaders,
+		ExposeHeaders:    config.ExposeHeaders,
+		AllowCredentials: config.AllowCredentials,
+		MaxAge:           config.MaxAge,
+	})
 
 	return corsConfig
 }

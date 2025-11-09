@@ -60,7 +60,8 @@ func (sm *SessionManager) Logout(c *gin.Context, sessionID string) {
 func (sm *SessionManager) Middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Skip auth for certain paths
-		if c.Path() == "/admin/login" || c.Path() == "/admin/do-login" || c.Path() == "/healthz" {
+		path := c.Request.URL.Path
+		if path == "/admin/login" || path == "/admin/do-login" || path == "/healthz" {
 			c.Next()
 			return
 		}

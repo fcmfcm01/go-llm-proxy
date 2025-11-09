@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-proxy
+  namespace: llm-proxy
+  labels:
+    app: llm-proxy
+    version: v1.0.0
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: llm-proxy
+  template:
+    metadata:
+      labels:
+        app: llm-proxy
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: llm-proxy
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: llm-proxy
+        image: go-llm-proxy:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: https
+          containerPort: 8443
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        env:
+        # Configuration from environment
+        - name: LLM_PROXY_SERVER_MODE
+          value: "production"
+        - name: LLM_PROXY_LOGGING_LEVEL
+          value: "info"
+        - name: LLM_PROXY_MONITORING_ENABLED
+          value: "true"
+        - name: LLM_PROXY_SECURITY_SESSION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: llm-proxy-secret
+              key: session-secret
+        # Resource configuration
+        - name: GOMAXPROCS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        - name: GOMEMLIMIT
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+          readOnly: true
+        - name: data
+          mountPath: /app/data
+        - name: logs
+          mountPath: /app/logs
+        - name: tmp
+          mountPath: /tmp
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 10
+        resources:
+          requests:
+            memory: "25Mi"
+            cpu: "100m"
+          limits:
+            memory: "50Mi"
+            cpu: "500m"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - NET_BIND_SERVICE
+      volumes:
+      - name: config
+        configMap:
+          name: llm-proxy-config
+      - name: data
+        persistentVolumeClaim:
+          claimName: llm-proxy-data-pvc
+      - name: logs
+        emptyDir: {}
+      - name: tmp
+        emptyDir:
+          sizeLimit: 100Mi
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      tolerations:
+      - key: "llm-proxy"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - llm-proxy
+              topologyKey: kubernetes.io/hostname

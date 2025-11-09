@@ -1,0 +1,268 @@
+version: '3.8'
+
+services:
+  # Main LLM Proxy service - Production Configuration
+  llm-proxy:
+    image: go-llm-proxy:latest
+    container_name: llm-proxy-prod
+    ports:
+      - "80:8080"   # HTTP (redirect to HTTPS in production)
+      - "443:8443"  # HTTPS
+    environment:
+      # Server Configuration
+      - LLM_PROXY_SERVER_MODE=production
+      - LLM_PROXY_SERVER_PORT=8080
+      - LLM_PROXY_SERVER_TLS_PORT=8443
+      - LLM_PROXY_SERVER_ENABLE_TLS=true
+      - LLM_PROXY_SERVER_TLS_CERT=/certs/tls.crt
+      - LLM_PROXY_SERVER_TLS_KEY=/certs/tls.key
+
+      # Security Configuration
+      - LLM_PROXY_SECURITY_SESSION_SECRET=${LLM_PROXY_SESSION_SECRET}
+      - LLM_PROXY_SECURITY_RATE_LIMIT=${LLM_PROXY_RATE_LIMIT:-1000}
+      - LLM_PROXY_SECURITY_ENABLE_CORS=false
+      - LLM_PROXY_SECURITY_CORS_ALLOWED_ORIGINS=${LLM_PROXY_CORS_ORIGINS}
+
+      # Proxy Configuration
+      - LLM_PROXY_PROXY_TIMEOUT=30
+      - LLM_PROXY_PROXY_MAX_RETRIES=3
+      - LLM_PROXY_PROXY_REQUEST_TIMEOUT=60
+      - LLM_PROXY_PROXY_IDLE_TIMEOUT=90
+
+      # Monitoring & Logging
+      - LLM_PROXY_MONITORING_ENABLED=true
+      - LLM_PROXY_MONITORING_METRICS_PORT=9090
+      - LLM_PROXY_LOGGING_LEVEL=info
+      - LLM_PROXY_LOGGING_FORMAT=json
+      - LLM_PROXY_LOGGING_ENABLE_AUDIT=true
+
+      # Performance Configuration
+      - LLM_PROXY_PERFORMANCE_CONNECTION_POOL_SIZE=100
+      - LLM_PROXY_PERFORMANCE_CACHE_ENABLED=true
+      - LLM_PROXY_PERFORMANCE_CACHE_TTL=300
+      - LLM_PROXY_PERFORMANCE_ENABLE_COMPRESSION=true
+
+    volumes:
+      # Configuration
+      - ./config/production.yaml:/app/config/production.yaml:ro
+      # TLS Certificates
+      - ./certs:/certs:ro
+      # Data Persistence
+      - llm-proxy-config:/app/data/config
+      - llm-proxy-sessions:/app/data/sessions
+      - llm-proxy-logs:/app/data/logs
+      - llm-proxy-backup:/app/data/backup
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    # Production resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+          cpus: '0.5'
+        reservations:
+          memory: 25M
+          cpus: '0.25'
+      # Replica configuration for HA
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    # Read-only root filesystem
+    read_only: true
+    # Tempfs for /tmp
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+    networks:
+      - llm-proxy-prod-network
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Redis for session storage (optional, for distributed deployments)
+  redis:
+    image: redis:7-alpine
+    container_name: llm-proxy-redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+    networks:
+      - llm-proxy-prod-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: llm-proxy-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--storage.tsdb.retention.size=10GB'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+    networks:
+      - llm-proxy-prod-network
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: llm-proxy-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      # Security
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_SECRET_KEY=${GRAFANA_SECRET_KEY}
+      - GF_SECURITY_DISABLE_GRAVATAR=true
+      - GF_USERS_ALLOW_SIGN_UP=false
+      # Performance
+      - GF_ANALYTICS_REPORTING_ENABLED=false
+      - GF_ANALYTICS_CHECK_FOR_UPDATES=false
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    networks:
+      - llm-proxy-prod-network
+    depends_on:
+      - prometheus
+
+  # Nginx reverse proxy for TLS termination
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: llm-proxy-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./certs:/etc/nginx/certs:ro
+      - nginx-logs:/var/log/nginx
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:noexec,nosuid,size=100m
+      - /var/run:noexec,nosuid,size=100m
+      - /tmp:noexec,nosuid,size=100m
+    networks:
+      - llm-proxy-prod-network
+    depends_on:
+      - llm-proxy
+
+  # Watchtower for automatic updates (optional)
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: llm-proxy-watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 86400 --cleanup
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - llm-proxy-prod-network
+    profiles:
+      - auto-update
+
+networks:
+  llm-proxy-prod-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: llm-proxy-br0
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  # Persistent volumes for data
+  llm-proxy-config:
+    driver: local
+  llm-proxy-sessions:
+    driver: local
+  llm-proxy-logs:
+    driver: local
+  llm-proxy-backup:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  redis-data:
+    driver: local
+  nginx-logs:
+    driver: local

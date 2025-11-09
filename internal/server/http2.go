@@ -1,6 +1,7 @@
 package server
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -28,7 +29,7 @@ func NewHTTP2Config() *HTTP2Config {
 		WriteTimeout:         15 * time.Second,
 		IdleTimeout:          60 * time.Second,
 		MaxConcurrentStreams: 1000,
-		MaxReadFrameSize:     http2.DefaultMaxReadFrameSize,
+		MaxReadFrameSize:     16777216, // Default frame size
 	}
 }
 
@@ -37,11 +38,7 @@ func (s *Server) StartHTTP2(config *HTTP2Config) error {
 	s.SetupRoutes()
 
 	http2Config := &http2.Server{
-		ReadTimeout:          config.ReadTimeout,
-		WriteTimeout:         config.WriteTimeout,
-		IdleTimeout:          config.IdleTimeout,
 		MaxConcurrentStreams: config.MaxConcurrentStreams,
-		MaxReadFrameSize:     config.MaxReadFrameSize,
 	}
 
 	// Create HTTP/2-enabled server
@@ -75,11 +72,7 @@ func (s *Server) StartHTTP2TLS(tlsConfig *TLSConfig, http2Config *HTTP2Config) e
 	s.SetupRoutes()
 
 	h2Config := &http2.Server{
-		ReadTimeout:          http2Config.ReadTimeout,
-		WriteTimeout:         http2Config.WriteTimeout,
-		IdleTimeout:          http2Config.IdleTimeout,
 		MaxConcurrentStreams: http2Config.MaxConcurrentStreams,
-		MaxReadFrameSize:     http2Config.MaxReadFrameSize,
 	}
 
 	// Create TLS config for HTTP/2

@@ -113,7 +113,7 @@ func (w *Watcher) watch() {
 // shouldProcessEvent determines if an event should be processed
 func (w *Watcher) shouldProcessEvent(event fsnotify.Event) bool {
 	// Check if it's a config file
-	if !filepath.Base(event.Name) == filepath.Base(w.configPath) {
+	if filepath.Base(event.Name) != filepath.Base(w.configPath) {
 		return false
 	}
 
@@ -147,7 +147,11 @@ func (w *Watcher) reload() {
 		w.logger.WithError(err).Error("Failed to reload configuration")
 
 		// Exponential backoff on error
-		w.backoff = time.Min(float64(w.backoff*2), float64(w.maxBackoff))
+		newBackoff := w.backoff * 2
+		if newBackoff > w.maxBackoff {
+			newBackoff = w.maxBackoff
+		}
+		w.backoff = newBackoff
 	} else {
 		w.logger.Info("Configuration reloaded successfully")
 		w.backoff = time.Second
@@ -197,7 +201,7 @@ func (w *Watcher) RemoveWatch(path string) error {
 
 // GetWatchedPaths returns the list of watched paths
 func (w *Watcher) GetWatchedPaths() ([]string, error) {
-	events := w.watcher.Events()
+	events := w.watcher.Events
 	paths := make([]string, 0)
 	for {
 		select {

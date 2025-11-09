@@ -217,7 +217,6 @@ func ValidatePasswordStrength(password string) error {
 	// Check for at least one digit
 	hasDigit := false
 	hasLetter := false
-	hasSpecial := false
 
 	for _, char := range password {
 		switch {
@@ -227,8 +226,6 @@ func ValidatePasswordStrength(password string) error {
 			hasLetter = true
 		case char < 32 || char > 126:
 			return fmt.Errorf("password contains invalid characters")
-		default:
-			hasSpecial = true
 		}
 	}
 

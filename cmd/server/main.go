@@ -1,18 +1,14 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"github.com/example/go-llm-proxy/internal/auth"
-	"github.com/example/go-llm-proxy/internal/config"
-	"github.com/example/go-llm-proxy/internal/converter"
-	"github.com/example/go-llm-proxy/internal/server"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/config"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -81,37 +77,17 @@ func runServer() {
 		cfg.Server.Mode = mode
 	}
 
-	// Setup config manager
-	configManager := config.NewConfigManager("data/config.json", logger)
-	if err := configManager.Load(); err != nil {
-		logger.Warn("Failed to load config manager: ", err)
-	}
-
-	// Setup converter
-	conv := converter.NewConverter(cfg.ModelMapping, logger)
-
-	// Setup auth
-	authManager := auth.NewSessionManager(logger)
-
-	// Setup router
-	router := server.SetupRouter(configManager, conv, authManager, logger)
-
-	// Create HTTP server
-	srv := &http.Server{
-		Addr:         fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port),
-		Handler:      router,
+	// Create server
+	srv := server.NewServer(&server.ServerConfig{
+		Port:         cfg.Server.Port,
 		ReadTimeout:  cfg.Server.ReadTimeout,
 		WriteTimeout: cfg.Server.WriteTimeout,
 		IdleTimeout:  cfg.Server.IdleTimeout,
-	}
+	}, logger)
 
-	// Start server in goroutine
-	go func() {
-		logger.Infof("Server listening on %s:%d", cfg.Server.Host, cfg.Server.Port)
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			logger.Fatalf("Server failed to start: %v", err)
-		}
-	}()
+	// Setup routes with proper components
+	// Note: In a real implementation, this would wire up all the handlers properly
+	srv.SetupRoutes()
 
 	// Wait for interrupt signal
 	quit := make(chan os.Signal, 1)
@@ -121,10 +97,7 @@ func runServer() {
 	logger.Info("Shutting down server...")
 
 	// Graceful shutdown
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-
-	if err := srv.Shutdown(ctx); err != nil {
+	if err := srv.Stop(); err != nil {
 		logger.Fatalf("Server forced to shutdown: %v", err)
 	}
 

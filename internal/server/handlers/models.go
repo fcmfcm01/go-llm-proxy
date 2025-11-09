@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/example/go-llm-proxy/internal/logging"
-	"github.com/example/go-llm-proxy/internal/models"
-	"github.com/example/go-llm-proxy/internal/proxy"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/proxy"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -113,22 +113,6 @@ func (h *ModelsHandler) HandleModels(c *gin.Context) {
 
 	// Log success
 	if h.proxyAuditLogger != nil {
-		event := &logging.AuditEvent{
-			Timestamp: time.Now(),
-			EventType: "models_list",
-			EventID:   generateEventID(),
-			UserID:    userID,
-			Username:  username,
-			IPAddress: c.ClientIP(),
-			Action:    "GET",
-			Resource:  "models",
-			Result:    "success",
-			RequestID: requestID,
-			SessionID: sessionID,
-			Metadata: map[string]interface{}{
-				"total_models": len(modelsList),
-			},
-		}
 		// Use the underlying audit logger
 		// h.proxyAuditLogger.auditLogger.LogEvent(event) // would need to expose this
 	}

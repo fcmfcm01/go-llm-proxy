@@ -6,7 +6,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/example/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
 )
 
 // LoadBalancer defines the interface for load balancing

@@ -1,7 +1,6 @@
 package logging
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -38,6 +37,14 @@ type AuditEvent struct {
 	Duration     time.Duration          `json:"duration,omitempty"`
 	RequestSize  int64                  `json:"request_size,omitempty"`
 	ResponseSize int64                  `json:"response_size,omitempty"`
+}
+
+// NewSimpleAuditLogger creates a new audit logger with simple configuration
+func NewSimpleAuditLogger(logger *Logger) *AuditLogger {
+	// For testing, we'll use a null logger
+	return &AuditLogger{
+		logger: logger.Logger,
+	}
 }
 
 // NewAuditLogger creates a new audit logger
@@ -104,9 +111,6 @@ func (a *AuditLogger) LogEvent(event *AuditEvent) {
 		"request_size":  event.RequestSize,
 		"response_size": event.ResponseSize,
 	}).Info("audit_event")
-
-	// Flush to ensure event is written
-	a.logger.Writer().Sync()
 }
 
 // LogAuthentication logs an authentication event
@@ -145,6 +149,20 @@ const (
 	AuditEventAuthLogin   = "auth.login"
 	AuditEventAuthLogout  = "auth.logout"
 	AuditEventAuthRefresh = "auth.refresh"
+
+	// Provider management events
+	AuditEventProviderList   = "provider.list"
+	AuditEventProviderStatus = "provider.status"
+	AuditEventProviderCreate = "provider.create"
+	AuditEventProviderUpdate = "provider.update"
+	AuditEventProviderDelete = "provider.delete"
+	AuditEventProviderToggle = "provider.toggle"
+
+	// Model mapping events
+	AuditEventMappingList   = "mapping.list"
+	AuditEventMappingCreate = "mapping.create"
+	AuditEventMappingUpdate = "mapping.update"
+	AuditEventMappingDelete = "mapping.delete"
 )
 
 // LogAuthorization logs an authorization event
@@ -210,6 +228,21 @@ func (a *AuditLogger) LogProxy(requestID, userID, ipAddress, action, provider, m
 		Duration:     duration,
 		RequestSize:  requestSize,
 		ResponseSize: responseSize,
+	}
+	a.LogEvent(event)
+}
+
+// LogAdminEvent logs an admin event
+func (a *AuditLogger) LogAdminEvent(ctx interface{}, eventType, resourceID, ipAddress, result string, metadata map[string]interface{}) {
+	event := &AuditEvent{
+		EventType:  eventType,
+		EventID:    generateEventID(),
+		IPAddress:  ipAddress,
+		Resource:   "admin",
+		ResourceID: resourceID,
+		Result:     result,
+		Metadata:   metadata,
+		Timestamp:  time.Now(),
 	}
 	a.LogEvent(event)
 }

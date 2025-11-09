@@ -5,14 +5,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/example/go-llm-proxy/internal/config"
 	"github.com/spf13/viper"
 )
 
 // DefaultConfig returns the default configuration
-func DefaultConfig() *config.Config {
-	return &config.Config{
-		Server: config.ServerConfig{
+func DefaultConfig() *Config {
+	return &Config{
+		Server: ServerConfig{
 			Host:         "0.0.0.0",
 			Port:         8080,
 			Mode:         "debug",
@@ -20,27 +19,27 @@ func DefaultConfig() *config.Config {
 			WriteTimeout: 30 * time.Second,
 			IdleTimeout:  120 * time.Second,
 		},
-		Proxy: config.ProxyConfig{
+		Proxy: ProxyConfig{
 			DefaultBackend: "https://api.openai.com/v1",
 			Timeout:        30 * time.Second,
 			MaxRetries:     3,
 		},
-		Auth: config.AuthConfig{
+		Auth: AuthConfig{
 			Enabled:        true,
 			Username:       "admin",
 			Password:       "admin123",
 			SessionTimeout: 24 * time.Hour,
 		},
-		Logging: config.LoggingConfig{
+		Logging: LoggingConfig{
 			Level:  "info",
 			Format: "json",
 			Output: "stdout",
 		},
-		Metrics: config.MetricsConfig{
+		Metrics: MetricsConfig{
 			Enabled: true,
 			Path:    "/metrics",
 		},
-		Providers: []config.Provider{},
+		Providers: []Provider{},
 		ModelMapping: map[string]string{
 			"claude-3-opus-20240229":     "gpt-4",
 			"claude-3-sonnet-20240229":   "gpt-4-turbo",
@@ -51,7 +50,7 @@ func DefaultConfig() *config.Config {
 }
 
 // LoadConfig loads configuration from file
-func LoadConfig(configPath string) (*config.Config, error) {
+func LoadConfig(configPath string) (*Config, error) {
 	if configPath == "" {
 		configPath = "config.yaml"
 	}
@@ -78,7 +77,7 @@ func LoadConfig(configPath string) (*config.Config, error) {
 		return nil, fmt.Errorf("failed to read config: %w", err)
 	}
 
-	var config config.Config
+	var config Config
 	if err := viper.Unmarshal(&config); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal config: %w", err)
 	}
@@ -87,7 +86,7 @@ func LoadConfig(configPath string) (*config.Config, error) {
 }
 
 // SaveConfig saves configuration to file
-func SaveConfig(config *config.Config, configPath string) error {
+func SaveConfig(config *Config, configPath string) error {
 	if configPath == "" {
 		configPath = "config.yaml"
 	}

@@ -1,0 +1,69 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: llm-proxy
+  namespace: llm-proxy
+  labels:
+    app: llm-proxy
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: llm-proxy
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+  - port: http
+    path: /healthz
+    interval: 30s
+    scrapeTimeout: 5s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: llm-proxy-rules
+  namespace: llm-proxy
+  labels:
+    app: llm-proxy
+    release: prometheus
+spec:
+  groups:
+  - name: llm-proxy
+    rules:
+    - alert: LLMProxyDown
+      expr: up{job="llm-proxy"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "LLM Proxy is down"
+        description: "LLM Proxy has been down for more than 1 minute"
+
+    - alert: LLMProxyHighCPU
+      expr: rate(container_cpu_usage_seconds_total{pod=~"llm-proxy-.*"}[5m]) * 100 > 80
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "LLM Proxy high CPU usage"
+        description: "LLM Proxy CPU usage is above 80% for more than 5 minutes"
+
+    - alert: LLMProxyHighMemory
+      expr: container_memory_working_set_bytes{pod=~"llm-proxy-.*"} / container_spec_memory_limit_bytes * 100 > 90
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "LLM Proxy high memory usage"
+        description: "LLM Proxy memory usage is above 90% for more than 5 minutes"
+
+    - alert: LLMProxyHighErrorRate
+      expr: rate(llm_proxy_requests_total{status=~"5.."}[5m]) / rate(llm_proxy_requests_total[5m]) > 0.1
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "LLM Proxy high error rate"
+        description: "LLM Proxy error rate is above 10% for more than 5 minutes"

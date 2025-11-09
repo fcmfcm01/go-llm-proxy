@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: llm-proxy
+  labels:
+    name: llm-proxy
+    environment: production

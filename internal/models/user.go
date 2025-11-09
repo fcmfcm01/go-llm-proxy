@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/example/go-llm-proxy/internal/crypto"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/crypto"
 	"github.com/go-playground/validator/v10"
 )
 

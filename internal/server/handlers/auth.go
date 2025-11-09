@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/example/go-llm-proxy/internal/auth"
-	"github.com/example/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/auth"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
 )
 
 // AuthHandler handles authentication requests
@@ -97,7 +97,7 @@ func (h *AuthHandler) HandleLogout(c *gin.Context) {
 		return
 	}
 
-	session, ok := sessionInterface.(*auth.SessionInfo)
+	session, ok := sessionInterface.(*SessionInfo)
 	if !ok {
 		// Try models.Session
 		if sess, ok := sessionInterface.(interface {

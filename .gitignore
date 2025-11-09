@@ -24,6 +24,7 @@ go.work.sum
 # Build directories
 build/
 dist/
+specs/
 
 # IDE files
 .DS_Store

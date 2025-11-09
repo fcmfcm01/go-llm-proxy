@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/example/go-llm-proxy/internal/auth"
-	"github.com/example/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/auth"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
 )
 
 // AuthMiddleware creates an authentication middleware

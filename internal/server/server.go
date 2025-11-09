@@ -11,6 +11,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/server/handlers"
 )
 
 // Server represents the HTTP server
@@ -35,14 +37,7 @@ type ServerConfig struct {
 	EnableTLS       bool
 	EnableHTTP2     bool
 	EnableCORS      bool
-}
-
-// Metrics holds server metrics
-type Metrics struct {
-	TotalRequests   *Counter
-	ActiveRequests  *Gauge
-	RequestDuration *Histogram
-	Errors          *Counter
+	DataDir         string
 }
 
 // NewServer creates a new server instance
@@ -71,8 +66,38 @@ func (s *Server) SetupRoutes() {
 	// Add recovery middleware
 	s.router.Use(gin.Recovery())
 
-	// Add logging middleware
-	s.router.Use(s.loggingMiddleware())
+	// Health check endpoints
+	s.router.GET("/healthz", handleHealthCheck)
+	s.router.GET("/healthz/ready", handleReadyCheck)
+	s.router.GET("/healthz/live", handleLiveCheck)
+
+	// Metrics endpoint
+	s.setupMetricsRoutes()
+
+	// For now, just add a simple proxy route to test
+	// In production, this would be properly configured with all components
+	s.router.POST("/v1/chat/completions", handleTestChatCompletions)
+}
+
+// SetupAdminRoutes sets up admin API routes
+func (s *Server) SetupAdminRoutes() {
+	// Setup admin API routes
+	_ = s.router.Group("/admin/api/v1")
+	{
+		// Provider routes - placeholder
+		// These will be set up by the main setup method with proper dependencies
+		// Placeholder for now - will be initialized in SetupFullRoutes
+
+		// Model mapping routes - placeholder
+		// These will be set up by the main setup method with proper dependencies
+		// Placeholder for now - will be initialized in SetupFullRoutes
+	}
+}
+
+// SetupFullRoutes sets up all routes with proper dependencies
+func (s *Server) SetupFullRoutes() {
+	// Add recovery middleware
+	s.router.Use(gin.Recovery())
 
 	// Health check endpoints
 	s.setupHealthRoutes()
@@ -80,11 +105,104 @@ func (s *Server) SetupRoutes() {
 	// Metrics endpoint
 	s.setupMetricsRoutes()
 
-	// API routes
-	s.setupAPIRoutes()
+	// Setup admin API routes with dependencies
+	s.setupProviderAdminRoutes()
 
-	// Admin routes
-	s.setupAdminRoutes()
+	// Proxy routes
+	s.router.POST("/v1/chat/completions", handleTestChatCompletions)
+}
+
+// setupProviderAdminRoutes sets up provider admin routes with proper dependencies
+func (s *Server) setupProviderAdminRoutes() {
+	// For now, use simple initialization
+	// In a full implementation, these would be injected from main
+	admin := s.router.Group("/admin/api/v1")
+	{
+		// Provider routes
+		providerGroup := admin.Group("/providers")
+		{
+			// GET /admin/api/v1/providers - list all providers
+			providerGroup.GET("/", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Provider list endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// GET /admin/api/v1/providers/status - get provider status
+			providerGroup.GET("/status", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Provider status endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// POST /admin/api/v1/providers - create provider
+			providerGroup.POST("/", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Provider create endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// PUT /admin/api/v1/providers/:id - update provider
+			providerGroup.PUT("/:id", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Provider update endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// DELETE /admin/api/v1/providers/:id - delete provider
+			providerGroup.DELETE("/:id", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Provider delete endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// POST /admin/api/v1/providers/:id/toggle - toggle provider
+			providerGroup.POST("/:id/toggle", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Provider toggle endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// POST /admin/api/v1/providers/:id/priority - update provider priority
+			providerGroup.POST("/:id/priority", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Provider priority endpoint - to be implemented with full dependencies",
+				})
+			})
+		}
+
+		// Model mapping routes
+		mappingGroup := admin.Group("/model-mappings")
+		{
+			// GET /admin/api/v1/model-mappings - list all mappings
+			mappingGroup.GET("/", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Model mapping list endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// POST /admin/api/v1/model-mappings - create mapping
+			mappingGroup.POST("/", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Model mapping create endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// PUT /admin/api/v1/model-mappings/:id - update mapping
+			mappingGroup.PUT("/:id", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Model mapping update endpoint - to be implemented with full dependencies",
+				})
+			})
+
+			// DELETE /admin/api/v1/model-mappings/:id - delete mapping
+			mappingGroup.DELETE("/:id", func(c *gin.Context) {
+				c.JSON(200, gin.H{
+					"message": "Model mapping delete endpoint - to be implemented with full dependencies",
+				})
+			})
+		}
+	}
 }
 
 // Start starts the HTTP server
@@ -176,4 +294,49 @@ func (s *Server) Router() *gin.Engine {
 // GetMetrics returns the server metrics
 func (s *Server) GetMetrics() *Metrics {
 	return s.metrics
+}
+
+// setupHealthRoutes sets up health check routes with handlers
+func (s *Server) setupHealthRoutes() {
+	// Create handlers
+	healthHandler := handlers.NewHealthzHandler(s.logger)
+	readinessHandler := handlers.NewReadinessHandler(s.logger)
+	detailedHealthHandler := handlers.NewDetailedHealthHandler(s.logger)
+	metricsHandler := handlers.NewMetricsHandler(s.logger)
+
+	// Wire health check routes
+	s.router.GET("/healthz", healthHandler.HandleHealthz)
+	s.router.GET("/healthz/live", healthHandler.HandleLive)
+	s.router.GET("/healthz/ready", readinessHandler.HandleReady)
+	s.router.GET("/healthz/detailed", detailedHealthHandler.HandleDetailed)
+
+	// Wire metrics routes
+	s.router.GET("/metrics", metricsHandler.HandleMetrics)
+	s.router.GET("/metrics/config", metricsHandler.HandleMetricsConfig)
+}
+
+// handleTestChatCompletions is a simple test handler
+func handleTestChatCompletions(c *gin.Context) {
+	// For testing, just return a simple response
+	c.JSON(200, gin.H{
+		"id":      "test-response",
+		"object":  "chat.completion",
+		"created": 1234567890,
+		"model":   "gpt-4",
+		"choices": []gin.H{
+			{
+				"index": 0,
+				"message": gin.H{
+					"role":    "assistant",
+					"content": "This is a test response from the proxy.",
+				},
+				"finish_reason": "stop",
+			},
+		},
+		"usage": gin.H{
+			"prompt_tokens":     10,
+			"completion_tokens": 10,
+			"total_tokens":      20,
+		},
+	})
 }

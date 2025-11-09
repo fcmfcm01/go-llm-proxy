@@ -13,7 +13,7 @@ import (
 func TestCompletionsContract(t *testing.T) {
 	// Test case 1: Valid request with required fields
 	t.Run("ValidRequestWithRequiredFields", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":  "gpt-3.5-turbo-instruct",
 			"prompt": "Once upon a time",
 		}
@@ -28,7 +28,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 2: Valid request with optional parameters
 	t.Run("ValidRequestWithOptionalParams", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":             "gpt-3.5-turbo-instruct",
 			"prompt":            "Write a story about",
 			"temperature":       0.8,
@@ -47,7 +47,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 3: Missing required field - model
 	t.Run("MissingRequiredFieldModel", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"prompt": "Once upon a time",
 		}
 
@@ -59,7 +59,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 4: Missing required field - prompt
 	t.Run("MissingRequiredFieldPrompt", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model": "gpt-3.5-turbo-instruct",
 		}
 
@@ -71,7 +71,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 5: Array of prompts
 	t.Run("ArrayOfPrompts", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model": "gpt-3.5-turbo-instruct",
 			"prompts": []string{
 				"Once upon a time",
@@ -87,7 +87,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 6: Stop sequences
 	t.Run("WithStopSequences", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":  "gpt-3.5-turbo-instruct",
 			"prompt": "Translate to French: Hello",
 			"stop":   []string{"\n", "."},
@@ -101,7 +101,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 7: Response format - text
 	t.Run("ResponseFormatText", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":  "gpt-3.5-turbo-instruct",
 			"prompt": "Hello",
 			"response_format": map[string]interface{}{
@@ -117,7 +117,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 8: Response format - JSON
 	t.Run("ResponseFormatJSON", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":  "gpt-3.5-turbo-instruct",
 			"prompt": "Return a JSON object",
 			"response_format": map[string]interface{}{
@@ -133,7 +133,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 9: Log probabilities
 	t.Run("WithLogProbabilities", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":        "gpt-3.5-turbo-instruct",
 			"prompt":       "Hello",
 			"logprobs":     true,
@@ -148,7 +148,7 @@ func TestCompletionsContract(t *testing.T) {
 
 	// Test case 10: Echo parameter
 	t.Run("EchoParameter", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":  "gpt-3.5-turbo-instruct",
 			"prompt": "Hello",
 			"echo":   true,

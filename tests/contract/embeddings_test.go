@@ -13,7 +13,7 @@ import (
 func TestEmbeddingsContract(t *testing.T) {
 	// Test case 1: Valid request with required fields
 	t.Run("ValidRequestWithRequiredFields", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model": "text-embedding-ada-002",
 			"input": "The quick brown fox jumps over the lazy dog",
 		}
@@ -28,7 +28,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 	// Test case 2: Valid request with array input
 	t.Run("ValidRequestWithArrayInput", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model": "text-embedding-ada-002",
 			"input": []string{
 				"First document",
@@ -46,7 +46,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 	// Test case 3: Missing required field - model
 	t.Run("MissingRequiredFieldModel", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"input": "The quick brown fox",
 		}
 
@@ -58,7 +58,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 	// Test case 4: Missing required field - input
 	t.Run("MissingRequiredFieldInput", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model": "text-embedding-ada-002",
 		}
 
@@ -70,7 +70,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 	// Test case 5: Empty input string
 	t.Run("EmptyInputString", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model": "text-embedding-ada-002",
 			"input": "",
 		}
@@ -83,7 +83,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 	// Test case 6: Empty input array
 	t.Run("EmptyInputArray", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model": "text-embedding-ada-002",
 			"input": []string{},
 		}
@@ -96,7 +96,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 	// Test case 7: Valid request with optional parameters
 	t.Run("ValidRequestWithOptionalParams", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":      "text-embedding-ada-002",
 			"input":      "The quick brown fox",
 			"user":       "user-123",
@@ -119,7 +119,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 		for _, model := range models {
 			t.Run(model, func(t *testing.T) {
-				payload := map[string]interface{}{
+
 					"model": model,
 					"input": "Sample text",
 				}
@@ -134,7 +134,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 	// Test case 9: User parameter for tracking
 	t.Run("UserParameterForTracking", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model": "text-embedding-ada-002",
 			"input": "Sample text",
 			"user":  "end-user-123",
@@ -148,7 +148,7 @@ func TestEmbeddingsContract(t *testing.T) {
 
 	// Test case 10: Dimensions parameter
 	t.Run("DimensionsParameter", func(t *testing.T) {
-		payload := map[string]interface{}{
+
 			"model":      "text-embedding-3-large",
 			"input":      "Sample text",
 			"dimensions": 256,

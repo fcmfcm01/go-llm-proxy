@@ -44,8 +44,8 @@ func GetRequestID(ctx context.Context) string {
 	return ""
 }
 
-// GetUserID retrieves the user ID from context
-func GetUserID(ctx context.Context) string {
+// GetUserIDFromContext retrieves the user ID from context
+func GetUserIDFromContext(ctx context.Context) string {
 	if id, ok := ctx.Value(UserIDKey).(string); ok {
 		return id
 	}

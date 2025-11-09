@@ -1,17 +1,15 @@
 package handlers
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"time"
 
-	"github.com/example/go-llm-proxy/internal/auth"
-	"github.com/example/go-llm-proxy/internal/logging"
-	"github.com/example/go-llm-proxy/internal/models"
-	"github.com/example/go-llm-proxy/internal/proxy"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/logging"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/proxy"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )

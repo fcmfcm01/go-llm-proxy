@@ -4,7 +4,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
@@ -15,6 +14,18 @@ import (
 type Logger struct {
 	*logrus.Logger
 	mu sync.Mutex
+}
+
+// NewSimpleLogger creates a new logger with simple configuration
+func NewSimpleLogger(level string) *Logger {
+	lg := logrus.New()
+	logLevel, _ := logrus.ParseLevel(level)
+	lg.SetLevel(logLevel)
+	lg.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp: true,
+		DisableColors: true,
+	})
+	return &Logger{Logger: lg}
 }
 
 // NewLogger creates a new logger with the given configuration

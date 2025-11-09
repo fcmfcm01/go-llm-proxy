@@ -1,0 +1,59 @@
+[Unit]
+Description=LLM Proxy Server (Go)
+Documentation=https://github.com/fcmfcm01/go-llm-proxy
+After=network.target network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=llm-proxy
+Group=llm-proxy
+Environment=LLM_PROXY_SERVER_MODE=production
+Environment=LLM_PROXY_LOGGING_LEVEL=info
+Environment=LLM_PROXY_MONITORING_ENABLED=true
+
+# Working directory
+WorkingDirectory=/opt/llm-proxy
+
+# Binary path
+ExecStart=/opt/llm-proxy/llm-proxy serve --config /opt/llm-proxy/config/production.yaml
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/llm-proxy/data /var/log/llm-proxy
+RestrictRealtime=true
+RestrictSUIDSGID=true
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+MemoryLimit=64M
+TasksMax=4096
+
+# Restart on failure
+StartLimitBurst=3
+StartLimitInterval=60
+
+# Environment file
+EnvironmentFile=/etc/default/llm-proxy
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=llm-proxy
+
+# Health check
+ExecStartPost=/bin/bash -c 'sleep 5; /opt/llm-proxy/llm-proxy healthcheck || exit 1'
+
+# Graceful shutdown
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

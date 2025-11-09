@@ -46,10 +46,21 @@ type MetricsConfig struct {
 }
 
 type Provider struct {
-	ID        string `mapstructure:"id"`
-	Name      string `mapstructure:"name"`
-	URL       string `mapstructure:"url"`
-	Enabled   bool   `mapstructure:"enabled"`
-	CreatedAt int64  `mapstructure:"created_at"`
-	UpdatedAt int64  `mapstructure:"updated_at"`
+	ID         string `mapstructure:"id"`
+	Name       string `mapstructure:"name"`
+	URL        string `mapstructure:"url"`
+	APIKey     string `mapstructure:"api_key"`
+	Enabled    bool   `mapstructure:"enabled"`
+	CreatedAt  int64  `mapstructure:"created_at"`
+	UpdatedAt  int64  `mapstructure:"updated_at"`
+}
+
+// ProviderStatus represents the health status of a provider
+type ProviderStatus struct {
+	ID              string `json:"id"`
+	Name            string `json:"name"`
+	Healthy         bool   `json:"healthy"`
+	LastCheck       int64  `json:"last_check"`
+	ResponseTime    int64  `json:"response_time_ms,omitempty"`
+	ConsecutiveFailures int `json:"consecutive_failures,omitempty"`
 }

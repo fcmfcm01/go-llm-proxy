@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/example/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
 )
 
 // HealthChecker performs health checks on providers

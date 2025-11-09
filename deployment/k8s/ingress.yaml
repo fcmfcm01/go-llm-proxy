@@ -1,0 +1,77 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: llm-proxy
+  namespace: llm-proxy
+  labels:
+    app: llm-proxy
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/rate-limit: "1000"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+spec:
+  tls:
+  - hosts:
+    - api.llm-proxy.example.com
+    - admin.llm-proxy.example.com
+    secretName: llm-proxy-tls
+  rules:
+  - host: api.llm-proxy.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: llm-proxy
+            port:
+              number: 80
+  - host: admin.llm-proxy.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: llm-proxy
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: llm-proxy-metrics
+  namespace: llm-proxy
+  labels:
+    app: llm-proxy
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: llm-proxy-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Metrics Access"
+spec:
+  tls:
+  - hosts:
+    - metrics.llm-proxy.example.com
+    secretName: llm-proxy-tls
+  rules:
+  - host: metrics.llm-proxy.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: llm-proxy
+            port:
+              number: 9090

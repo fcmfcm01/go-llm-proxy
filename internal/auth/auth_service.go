@@ -9,7 +9,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/example/go-llm-proxy/internal/models"
+	"github.com/fcmfcm01/go-llm-proxy/go-llm-proxy/internal/models"
 )
 
 // AuthService handles authentication
@@ -337,55 +337,6 @@ func (s *AuthService) RefreshSessionExtended(ctx context.Context, sessionID stri
 	}, nil
 }
 
-// GetUserBySession gets user information from session
-func (s *AuthService) GetUserBySession(ctx context.Context, sessionID string) (*UserJSON, error) {
-	// Get session
-	session, err := s.sessionRepo.GetByID(ctx, sessionID)
-	if err != nil {
-		return nil, models.ErrUnauthorized
-	}
-
-	// Get user
-	user, err := s.userRepo.GetByID(ctx, session.UserID)
-	if err != nil {
-		return nil, models.ErrUnauthorized
-	}
-
-	return &UserJSON{
-		ID:        user.ID,
-		Username:  user.Username,
-		Role:      string(user.Role),
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}, nil
-}
-
-// LogoutAll logout all sessions for a user
-func (s *AuthService) LogoutAll(ctx context.Context, userID string) error {
-	// Delete all sessions for user
-	if err := s.sessionRepo.DeleteByUserID(ctx, userID); err != nil {
-		return fmt.Errorf("failed to delete sessions: %w", err)
-	}
-
-	s.logger.WithField("userID", userID).Info("All sessions invalidated")
-
-	return nil
-}
-
-// CleanupExpiredSessions cleans up expired sessions
-func (s *AuthService) CleanupExpiredSessions(ctx context.Context) (int, error) {
-	deleted, err := s.sessionRepo.DeleteExpired(ctx)
-	if err != nil {
-		return 0, fmt.Errorf("failed to cleanup expired sessions: %w", err)
-	}
-
-	if deleted > 0 {
-		s.logger.Infof("Cleaned up %d expired sessions", deleted)
-	}
-
-	return deleted, nil
-}
-
 // GetClientIP extracts the client IP from the request
 func GetClientIP(r interface{}) string {
 	// Try to extract IP from common headers
@@ -398,7 +349,7 @@ func GetClientIP(r interface{}) string {
 				return ip
 			}
 			// Try X-Real-IP
-			if ip, ok := headers["X-Real-IP"].(string); ip != "" {
+			if ip, ok := headers["X-Real-IP"].(string); ok && ip != "" {
 				return ip
 			}
 		}
